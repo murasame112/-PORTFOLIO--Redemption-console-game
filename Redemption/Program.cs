@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace Redemption
@@ -18,7 +19,9 @@ namespace Redemption
         - spelle (https://stackoverflow.com/questions/23437970/how-to-create-a-list-of-methods-then-execute-them/23437985)
         - mechanizm ucieczki (jaka kara za ucieczke?)
         - exp (i bohater i moby mogą mieć exp. zabijając moba bohater dostaje jego exp). bohater posiada max exp (skalowany z levelem). po walce sprawdzanie max expa i jak przekroczony to level up
-
+        - gold do sklepu a takze jako loot
+        - mana?
+        - dopilnowac, by tam gdzie gracz cos wprowadza nie bylo bledow (ze np zamiast 1 lub 2 poda liczbe 33 lub napisze "żuraw")
     fabuła:
         - na poczatku cytat nedlima, "asdf asdf" ~ Nedlim the Lightbringer (uzyc innego slowa)
         - po zabiciu jakeigoś bossa mozemy zmienic sie w Dark Paladina - zabijajc bossa wyzwalamy jakas moc czy cos ktora mowi, ze zastapi nam swiatlosc
@@ -35,19 +38,27 @@ namespace Redemption
             Item basicSword = new Sword("Basic Sword", 2);
             Item brokenSword = new Sword("Broken Sword", 1);
             Item omniblade = new Sword("Omniblade", 10);
-
-
+            Mob target = new Mob();
+           // playerCharacter.spells.Add(playerCharacter.TideThrust);
+            playerCharacter.spells.Add(() => playerCharacter.TideThrust(target));
+            playerCharacter.spellsString.Add("Tide Thrust");
+            playerCharacter.spellsString.Add("Radunhakedun");
             playerCharacter.ReceiveItem(basicSword);
             
 
             Mob goblin = new Mob();
+            
             goblin.CreateGenericMob( 1, "Goblin named Gayer");
+            target = goblin;
+            playerCharacter.Fight(playerCharacter, target);
 
-            playerCharacter.Fight(playerCharacter, goblin);
+
+           
 
             
+                
 
-            
+
 
 
 

@@ -8,6 +8,8 @@ namespace Redemption
 {
     public class Character : Unit
     {
+        public List<Action> spells = new List<Action>();
+        public List<string> spellsString = new List<string>();
         public int currentAtk { get; set; }
         public int currentArmor { get; set; }
         public int maxHp { get; set; }
@@ -175,12 +177,42 @@ namespace Redemption
 
         public void Attack(Unit unitAttacking, Unit unitAttacked, int atk, int armor)
         {
-            unitAttacked.currentHp -= (atk - armor);
-            if(unitAttacked.currentHp <= 0)
+            int damage = (atk - armor);
+            unitAttacked.currentHp -= damage;
+            if(unitAttacked.currentHp <= 0) { unitAttacked.currentHp = 0; }
+            Console.WriteLine("{0} attacks for {1}, {2} has {3} hp left",unitAttacking.name, damage, unitAttacked.name, unitAttacked.currentHp);
+
+        }
+
+        public void ChooseSpell()
+        {
+            int i = 1;
+            Console.WriteLine();
+            Console.WriteLine("Your spells: ");
+            //foreach (Action spell in spells)
+            foreach(string spell in spellsString)
             {
-                unitAttacked.currentHp = 0;
+                
+
+                Console.WriteLine("{0}. {1}",i, spell);
+                i++;
             }
-            Console.WriteLine("{0} attacks for {1}, {2} has {3} hp left",unitAttacking.name, atk-armor, unitAttacked.name, unitAttacked.currentHp);
+            Console.Write("Choose spell: ");
+            int spellNumber = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine();
+            spells[spellNumber-1]();
+
+            
+
+        }
+
+        public void TideThrust(Mob target)
+        {
+            int damage = (this.currentAtk + 1) - target.baseArmor;
+            target.currentHp -= damage;
+            if(target.currentHp <= 0) { target.currentHp = 0; }
+            Console.WriteLine("{0} attacks with Tide Thrust for {1}, {2} has {3} hp left", this.name, damage, target.name, target.currentHp);
+
 
         }
 
@@ -212,6 +244,7 @@ namespace Redemption
                         Attack(character, mob, character.currentAtk, mob.baseArmor);
                         break;
                     case 2:
+                        ChooseSpell();
                         break;
                     case 3:
                         break;
