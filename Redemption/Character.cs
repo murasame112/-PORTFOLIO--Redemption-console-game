@@ -168,7 +168,9 @@ namespace Redemption
         }
         public void SpotEnemy(Mob mob)
         {
-
+            /*
+            napotykasz wroga takiego i takiego, chcesz walczyć czy sie wycofac/ominac/cokolwiek?
+             */
         }
 
         public void Attack(Unit unitAttacking, Unit unitAttacked, int atk, int armor)
@@ -221,6 +223,7 @@ namespace Redemption
             }
             if (character.currentHp > 0)
             {
+                UpdateStats();
                 Console.WriteLine(AnnounceWinner(character, mob));
             }else if (mob.currentHp > 0)
             {

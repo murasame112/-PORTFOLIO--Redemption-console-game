@@ -33,11 +33,7 @@ namespace Redemption
 
         }
         
-        public void UpdateStats()
-        {
-
-            
-        }
+        
 
     }
 }

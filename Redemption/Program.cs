@@ -16,7 +16,8 @@ namespace Redemption
         - dodanie kropek na końcu wypowiedzi
         - loot
         - spelle (https://stackoverflow.com/questions/23437970/how-to-create-a-list-of-methods-then-execute-them/23437985)
-        
+        - mechanizm ucieczki (jaka kara za ucieczke?)
+        - exp (i bohater i moby mogą mieć exp. zabijając moba bohater dostaje jego exp). bohater posiada max exp (skalowany z levelem). po walce sprawdzanie max expa i jak przekroczony to level up
 
     fabuła:
         - na poczatku cytat nedlima, "asdf asdf" ~ Nedlim the Lightbringer (uzyc innego slowa)
