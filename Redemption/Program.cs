@@ -43,8 +43,8 @@ namespace Redemption
             
             playerCharacter.spells.Add(() => playerCharacter.TideThrust(target));
             playerCharacter.spells.Add(playerCharacter.Rathonhnhaketon);
-            playerCharacter.spellsString.Add("Tide Thrust (move your blade like wave, to make lunge stronger than usual attack).");
-            playerCharacter.spellsString.Add("Rathonhnhake-ton (perform a quick ritual, that will restore your health).");
+            playerCharacter.spellsString.Add("Tide Thrust (move your blade like wave, to make lunge stronger than usual attack [+1 damage]).");
+            playerCharacter.spellsString.Add("Rathonhnhake-ton (perform a quick ritual, that will restore your health [20% heal]).");
             playerCharacter.ReceiveItem(basicSword);
             
 

@@ -16,6 +16,7 @@ namespace Redemption
         public Item[] items;
         public int currentHp { get; set; }
         public int experience { get; set; }
+        public int gold { get; set; }
 
     }
 }

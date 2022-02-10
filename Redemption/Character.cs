@@ -17,13 +17,14 @@ namespace Redemption
         public int maxExperience { get; set; }
         public Character()
         {
-            this.name = "Gustaw";
+            this.name = "Gustav";
             this.level = 1;
             this.baseArmor = 0;
             this.baseAtk = 1;
             this.baseHp = 10;
             this.experience = 0;
             this.maxExperience = 5;
+            this.gold = 0;
 
         }
 
@@ -221,7 +222,7 @@ namespace Redemption
 
         public void Rathonhnhaketon()
         {
-            int hpHealed = 3;
+            int hpHealed = this.maxHp/5;
             if (this.maxHp < this.currentHp + hpHealed) { hpHealed = this.maxHp - this.currentHp; }
 
             this.currentHp += hpHealed;
@@ -234,6 +235,12 @@ namespace Redemption
 
             
             return result;
+        }
+
+        public void GainGold(int goldGained)
+        {
+            Console.WriteLine("{0} gold gained.", goldGained);
+
         }
 
         public void GainExp(int expGained)
@@ -292,7 +299,8 @@ namespace Redemption
             {
                 UpdateStats();
                 Console.WriteLine(AnnounceWinner(character, mob));
-                character.GainExp(mob.dropExp());
+                character.GainExp(mob.DropExp());
+                character.GainGold(mob.DropGold());
                // mob.dropItemChance();
                 
             }else if (mob.currentHp > 0)

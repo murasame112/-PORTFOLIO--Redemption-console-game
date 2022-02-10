@@ -19,6 +19,7 @@ namespace Redemption
             this.baseHp = 5;
             this.currentHp = this.baseHp;
             this.experience = 1;
+            this.gold = 1;
 
         }
 
@@ -32,14 +33,21 @@ namespace Redemption
             this.baseHp = 5 * level;
             this.currentHp = this.baseHp;
             this.experience = 1 * level;
+            Random rand = new Random();
+            this.gold = rand.Next(level, (3 * level)-1);
 
 
         }
         
-        public int dropExp()
+        public int DropExp()
         {
             return this.experience;
 
+        }
+
+        public int DropGold()
+        {
+            return this.gold;
         }
 
     }
