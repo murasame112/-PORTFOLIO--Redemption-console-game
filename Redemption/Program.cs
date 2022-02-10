@@ -12,15 +12,11 @@ namespace Redemption
         - przeciwnicy nie mają itemów, ale mają mocniejsze staty (moga byc defaultowo liczone ze wzoru zaleznie od levela)
 
     todo:
-        - generowanie miejsc? (miastezcko ze sklepem, pobliski dungeon czy inny las)
-        - generowanie przeciwników i walka z nimi
+        - generowanie miejsc? (miasteczko ze sklepem, pobliski dungeon czy inny las)
         - dodanie kropek na końcu wypowiedzi
         - loot
-        - spelle (https://stackoverflow.com/questions/23437970/how-to-create-a-list-of-methods-then-execute-them/23437985)
         - mechanizm ucieczki (jaka kara za ucieczke?)
-        - exp (i bohater i moby mogą mieć exp. zabijając moba bohater dostaje jego exp). bohater posiada max exp (skalowany z levelem). po walce sprawdzanie max expa i jak przekroczony to level up
-        - gold do sklepu a takze jako loot
-        - mana?
+        - mana? możliwość użycia x spelli na walkę? (tyle ile level lub level *2)?
         - dopilnowac, by tam gdzie gracz cos wprowadza nie bylo bledow (ze np zamiast 1 lub 2 poda liczbe 33 lub napisze "żuraw")
     fabuła:
         - na poczatku cytat nedlima, "asdf asdf" ~ Nedlim the Lightbringer (uzyc innego slowa)
