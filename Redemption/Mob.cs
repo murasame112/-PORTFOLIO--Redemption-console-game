@@ -8,6 +8,7 @@ namespace Redemption
 {
     public class Mob : Unit
     {
+        
 
         public Mob()
         {
@@ -17,6 +18,7 @@ namespace Redemption
             this.baseAtk = 1;
             this.baseHp = 5;
             this.currentHp = this.baseHp;
+            this.experience = 1;
 
         }
 
@@ -25,15 +27,20 @@ namespace Redemption
             
             this.name = name;
             this.level = level;
-            this.baseArmor = 1 * level;
+            this.baseArmor = (1 * level)/2;
             this.baseAtk = 1 * level;
             this.baseHp = 5 * level;
             this.currentHp = this.baseHp;
+            this.experience = 1 * level;
 
 
         }
         
-        
+        public int dropExp()
+        {
+            return this.experience;
+
+        }
 
     }
 }

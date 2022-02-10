@@ -14,6 +14,7 @@ namespace Redemption
         public int currentArmor { get; set; }
         public int maxHp { get; set; }
         public Item[] items = new Item[3];
+        public int maxExperience { get; set; }
         public Character()
         {
             this.name = "Gustaw";
@@ -21,6 +22,8 @@ namespace Redemption
             this.baseArmor = 0;
             this.baseAtk = 1;
             this.baseHp = 10;
+            this.experience = 0;
+            this.maxExperience = 5;
 
         }
 
@@ -216,12 +219,43 @@ namespace Redemption
 
         }
 
+        public void Rathonhnhaketon()
+        {
+            int hpHealed = 3;
+            if (this.maxHp < this.currentHp + hpHealed) { hpHealed = this.maxHp - this.currentHp; }
+
+            this.currentHp += hpHealed;
+            Console.WriteLine("{0} heals for {1} hp. ", this.name, hpHealed);
+        }
+
         public string AnnounceWinner(Unit unitWinner, Unit unitLoser)
         {
             string result = unitWinner.name + " was victorious! " + unitLoser.name + " has been slain." ;
 
             
             return result;
+        }
+
+        public void GainExp(int expGained)
+        {
+            Console.WriteLine("{0} has gained {1} experience from this fight.", this.name, expGained);
+            this.experience += expGained;
+            if(this.experience >= maxExperience)
+            {
+                this.experience = 0;
+                this.LevelUp();
+            }
+        }
+
+        public void LevelUp()
+        {
+            this.level += 1;
+            if (level % 2 == 0) { this.baseArmor += 1; }
+            this.baseAtk += 1;
+            this.baseHp += 5;
+            this.experience = 0;
+            this.maxExperience += 5;
+            Console.WriteLine("{0} has gained level {1}!", this.name, this.level);
         }
 
         public void Fight(Character character, Mob mob)
@@ -258,6 +292,9 @@ namespace Redemption
             {
                 UpdateStats();
                 Console.WriteLine(AnnounceWinner(character, mob));
+                character.GainExp(mob.dropExp());
+               // mob.dropItemChance();
+                
             }else if (mob.currentHp > 0)
             {
                 Console.WriteLine(AnnounceWinner(mob, character));

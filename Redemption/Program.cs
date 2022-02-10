@@ -36,23 +36,25 @@ namespace Redemption
             
 
             Item basicSword = new Sword("Basic Sword", 2);
-            Item brokenSword = new Sword("Broken Sword", 1);
+            Item greatsword = new Sword("Greatsword", 3);
+            Item claymore = new Sword("Claymore", 5);
             Item omniblade = new Sword("Omniblade", 10);
             Mob target = new Mob();
-           // playerCharacter.spells.Add(playerCharacter.TideThrust);
+            
             playerCharacter.spells.Add(() => playerCharacter.TideThrust(target));
-            playerCharacter.spellsString.Add("Tide Thrust (move your blade like wave, to make lunge stronger than usual attack.");
-            playerCharacter.spellsString.Add("Rathonhnhake-ton (perform a quick ritual, that will restore your health)");
+            playerCharacter.spells.Add(playerCharacter.Rathonhnhaketon);
+            playerCharacter.spellsString.Add("Tide Thrust (move your blade like wave, to make lunge stronger than usual attack).");
+            playerCharacter.spellsString.Add("Rathonhnhake-ton (perform a quick ritual, that will restore your health).");
             playerCharacter.ReceiveItem(basicSword);
             
 
             Mob goblin = new Mob();
             
-            goblin.CreateGenericMob( 1, "Goblin named Gayer");
+            goblin.CreateGenericMob( 2, "Goblin named Gobberton");
             target = goblin;
             playerCharacter.Fight(playerCharacter, target);
 
-
+            
            
 
             

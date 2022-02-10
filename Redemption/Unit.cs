@@ -15,5 +15,7 @@ namespace Redemption
         public int baseAtk { get; set; }
         public Item[] items;
         public int currentHp { get; set; }
+        public int experience { get; set; }
+
     }
 }
