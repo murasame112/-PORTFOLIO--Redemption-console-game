@@ -41,8 +41,8 @@ namespace Redemption
             Mob target = new Mob();
            // playerCharacter.spells.Add(playerCharacter.TideThrust);
             playerCharacter.spells.Add(() => playerCharacter.TideThrust(target));
-            playerCharacter.spellsString.Add("Tide Thrust");
-            playerCharacter.spellsString.Add("Radunhakedun");
+            playerCharacter.spellsString.Add("Tide Thrust (move your blade like wave, to make lunge stronger than usual attack.");
+            playerCharacter.spellsString.Add("Rathonhnhake-ton (perform a quick ritual, that will restore your health)");
             playerCharacter.ReceiveItem(basicSword);
             
 
