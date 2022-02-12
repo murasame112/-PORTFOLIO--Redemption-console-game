@@ -12,12 +12,14 @@ namespace Redemption
         - przeciwnicy nie mają itemów, ale mają mocniejsze staty (moga byc defaultowo liczone ze wzoru zaleznie od levela)
 
     todo:
-        - generowanie miejsc? (miasteczko ze sklepem, pobliski dungeon czy inny las)
+        - ogarnięcie wyboru miejsc, podróży jako działania gracza, mozliwosci wyboru walki lub sklepu
+        - sklep
         - dodanie kropek na końcu wypowiedzi
-        - loot
         - mechanizm ucieczki (jaka kara za ucieczke?)
         - mana? możliwość użycia x spelli na walkę? (tyle ile level lub level *2)?
         - dopilnowac, by tam gdzie gracz cos wprowadza nie bylo bledow (ze np zamiast 1 lub 2 poda liczbe 33 lub napisze "żuraw")
+        - dodać mozliwosc anulowania spella zeby np wybrac jednak atak
+        
     fabuła:
         - na poczatku cytat nedlima, "asdf asdf" ~ Nedlim the Lightbringer (uzyc innego slowa)
         - po zabiciu jakeigoś bossa mozemy zmienic sie w Dark Paladina - zabijajc bossa wyzwalamy jakas moc czy cos ktora mowi, ze zastapi nam swiatlosc
@@ -27,8 +29,11 @@ namespace Redemption
     {
         static void Main(string[] args)
         {
+            
             Character playerCharacter = new Character();
             playerCharacter.CreateCharacter(playerCharacter);
+
+            Location location = new Location();
             
 
             Item basicSword = new Sword("Basic Sword", 2);
@@ -48,13 +53,24 @@ namespace Redemption
             
             goblin.CreateGenericMob( 2, "Goblin named Gobberton");
             target = goblin;
-            playerCharacter.Fight(playerCharacter, target);
+            //playerCharacter.Fight(playerCharacter, target);
 
             
-           
+            location.locationStrings.Add("Town");
+            location.locationActions.Add(() => location.GoToTown(location));
+            location.locationStrings.Add("Forest");
+            location.locationActions.Add(() => location.GoToForest(location));
 
-            
-                
+
+            location.Idle();
+            location.ChooseLocation();
+            location.Idle();
+            location.ChooseLocation();
+            location.Idle();
+            location.ChooseLocation();
+            location.Idle();
+
+
 
 
 
