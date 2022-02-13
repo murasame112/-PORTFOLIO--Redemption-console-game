@@ -16,9 +16,6 @@ namespace Redemption
         public bool civilized { get; set; }
         public int locationLevel { get; set; }
 
-        //po pojsciu do lokacji w miescie jest sklep/idz do innej lokacji/costam
-        // w innych lokacjach jest walka/idz do innej lokacji/costam
-        // z lokacji A mozna isc do B, a potem z B do C, ale z A nie mozna bezposrednio do C?
 
         public Location()
         {
@@ -91,31 +88,32 @@ namespace Redemption
 
         }
 
-        public void Idle(Character character, Mob mob)
+        public void Idle(Character character, Mob mob, List<Item> shopItemList)
         {
             Console.WriteLine();
             Console.WriteLine("What now? You are in {0}", this.name);
             if (this.civilized != true) { Console.WriteLine("1. Search for a monster."); }
             else { Console.WriteLine("1. Go to shop."); }
             Console.WriteLine("2. Go to another place.");
+            Console.WriteLine("3. Show your stats.");
             Console.Write("Your choice: ");
             int answer = Convert.ToInt32(Console.ReadLine());
             switch (answer)
             {
                 case 1:
                     if(this.civilized != true) { character.SpotEnemy(mob, this.locationLevel); }
-                    else if(this.civilized==true) { //idz do sklepu
-                                                    }
+                    else if(this.civilized==true) { character.GoShopping(shopItemList); }
                     break;
                 case 2:
                     this.ChooseLocation();
+                    break;
+                case 3:
+                    character.ShowStats();
                     break;
             }
 
 
         }
-
-        // ide do innej lokacji -> gdzie chcesz isc? funkcja ktora bierze na parametr listę lokacji i wyswietla foreach, a potem np zwraca string wybranej lokacji?
 
 
     }

@@ -8,10 +8,11 @@ namespace Redemption
 {
     public class Shield : Item
     {
-        public Shield(string name, int armor)
+        public Shield(string name, int armor, int price)
         {
             this.name = name;
             this.stat = armor;
+            this.price = price;
         }
     }
 }

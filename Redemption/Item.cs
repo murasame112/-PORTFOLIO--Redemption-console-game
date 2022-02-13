@@ -15,6 +15,7 @@ namespace Redemption
          */
         public string name { get; set; }
         public int stat { get; set; }
+        public int price { get; set; }
 
     }
 }

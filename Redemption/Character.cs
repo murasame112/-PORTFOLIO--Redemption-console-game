@@ -77,10 +77,9 @@ namespace Redemption
             Console.WriteLine("Your stats");
             Console.WriteLine();
             Console.WriteLine("Name: {0}", this.name);
-            Console.WriteLine("Base stats");
-            Console.WriteLine("  Hp: {0}", this.baseHp);
-            Console.WriteLine("  Armor: {0}", this.baseArmor);
-            Console.WriteLine("  Attack: {0}", this.baseAtk);
+            Console.WriteLine("  Experience: {0}", this.experience);
+            Console.WriteLine("  Experience needed to level up: {0}", this.maxExperience - this.experience);
+            Console.WriteLine("  Gold: {0}", this.gold);
 
             Console.WriteLine("Current stats (with items equipped)");
             Console.WriteLine("  Hp ({0}): {1}", itemNames[2], this.maxHp);
@@ -175,7 +174,7 @@ namespace Redemption
         public void SpotEnemy(Mob mob, int locationLevel)
         {
             mob.CreateGenericMob(locationLevel, "Goblin named Gobberton");
-            Console.WriteLine("You spot a monster! It's {0}.", mob.name);
+            Console.WriteLine("You spot a monster! It's {0} with level {1}.", mob.name, mob.level);
             Console.WriteLine("Do you want to fight?");
             Console.WriteLine("1. Yes.");
             Console.WriteLine("2. No.");
@@ -313,7 +312,6 @@ namespace Redemption
                 Console.WriteLine(AnnounceWinner(character, mob));
                 character.GainExp(mob.DropExp());
                 character.GainGold(mob.DropGold());
-               // mob.dropItemChance();
                 
             }else if (mob.currentHp > 0)
             {
@@ -324,6 +322,79 @@ namespace Redemption
 
 
 
+        }
+
+
+        public void GoShopping(List<Item> listOfItems)
+        {
+            Console.WriteLine();
+            Console.WriteLine("Welcome to the shop! Find yourself something useful.");
+            int i = 1;
+            i = ShowShopItemsList(listOfItems, i);
+           
+            Console.WriteLine("{0}. Leave.", i);
+
+            Console.WriteLine();
+            Console.WriteLine("Your gold: {0}.", this.gold);
+            Console.Write("Your answer: ");
+            
+            int answer = Convert.ToInt32(Console.ReadLine());
+            answer -= 1;
+            if (answer != listOfItems.Count)
+            {
+                if (listOfItems[answer].price <= this.gold)
+                {
+                    this.gold -= listOfItems[answer].price;
+                    this.ReceiveItem(listOfItems[answer]);
+                    Console.WriteLine("Thanks for buying {0}!", listOfItems[answer].name);
+                }
+                else
+                {
+                    Console.WriteLine("You don't even have enough money! Go away!");
+                }
+            }
+           
+        }
+
+        public int ShowShopItemsList(List<Item> listOfItems, int i)
+        {
+            Console.WriteLine("Swords: ");
+            foreach (Item item in listOfItems)
+            {
+
+                if (item.GetType() == typeof(Sword))
+                {
+                    Console.WriteLine("{0}. {1}, attack value: {2}, {3} gold", i, item.name, item.stat, item.price);
+                    i++;
+                }
+
+            }
+
+            Console.WriteLine("Shields: ");
+            foreach (Item item in listOfItems)
+            {
+
+                if (item.GetType() == typeof(Shield))
+                {
+                    Console.WriteLine("{0}. {1}, armor value: {2}, {3} gold", i, item.name, item.stat, item.price);
+                    i++;
+                }
+
+            }
+
+            Console.WriteLine("Breastplates: ");
+            foreach (Item item in listOfItems)
+            {
+
+                if (item.GetType() == typeof(Breastplate))
+                {
+                    Console.WriteLine("{0}. {1}, hp value: {2}, {3} gold", i, item.name, item.stat, item.price);
+                    i++;
+                }
+
+            }
+
+            return i;
         }
 
     }
