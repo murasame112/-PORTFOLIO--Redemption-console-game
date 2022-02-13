@@ -172,11 +172,23 @@ namespace Redemption
             return this.items.ElementAtOrDefault(id) != null;
 
         }
-        public void SpotEnemy(Mob mob)
+        public void SpotEnemy(Mob mob, int locationLevel)
         {
-            /*
-            napotykasz wroga takiego i takiego, chcesz walczyć czy sie wycofac/ominac/cokolwiek?
-             */
+            mob.CreateGenericMob(locationLevel, "Goblin named Gobberton");
+            Console.WriteLine("You spot a monster! It's {0}.", mob.name);
+            Console.WriteLine("Do you want to fight?");
+            Console.WriteLine("1. Yes.");
+            Console.WriteLine("2. No.");
+            Console.Write("Your answer: ");
+            int answer = Convert.ToInt32(Console.ReadLine());
+            switch (answer)
+            {
+                case 1:
+                    this.Fight(this, mob);
+                    break;
+                case 2:
+                    break;
+            }
         }
 
         public void Attack(Unit unitAttacking, Unit unitAttacked, int atk, int armor)

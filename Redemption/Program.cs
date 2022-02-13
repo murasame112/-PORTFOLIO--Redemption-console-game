@@ -12,7 +12,8 @@ namespace Redemption
         - przeciwnicy nie mają itemów, ale mają mocniejsze staty (moga byc defaultowo liczone ze wzoru zaleznie od levela)
 
     todo:
-        - ogarnięcie wyboru miejsc, podróży jako działania gracza, mozliwosci wyboru walki lub sklepu
+        - przypisac lokacjom sredni level mobow jakie tam są
+        - spot enemy
         - sklep
         - dodanie kropek na końcu wypowiedzi
         - mechanizm ucieczki (jaka kara za ucieczke?)
@@ -60,16 +61,14 @@ namespace Redemption
             location.locationActions.Add(() => location.GoToTown(location));
             location.locationStrings.Add("Forest");
             location.locationActions.Add(() => location.GoToForest(location));
+            location.locationStrings.Add("Cave");
+            location.locationActions.Add(() => location.GoToCave(location));
+            
+            while(true)
+            {
+                location.Idle(playerCharacter, target);
 
-
-            location.Idle();
-            location.ChooseLocation();
-            location.Idle();
-            location.ChooseLocation();
-            location.Idle();
-            location.ChooseLocation();
-            location.Idle();
-
+            }
 
 
 

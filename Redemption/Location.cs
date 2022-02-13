@@ -12,8 +12,9 @@ namespace Redemption
         public List<string> locationStrings = new List<string>();
         public List<Action> locationActions = new List<Action>();
         public string name {get; set;}
-        public string[] places;
-        public bool civilized;
+        public string[] places { get; set; }
+        public bool civilized { get; set; }
+        public int locationLevel { get; set; }
 
         //po pojsciu do lokacji w miescie jest sklep/idz do innej lokacji/costam
         // w innych lokacjach jest walka/idz do innej lokacji/costam
@@ -38,6 +39,7 @@ namespace Redemption
         {
             Location location = this;
             int i = 1;
+            Console.WriteLine();
             Console.WriteLine("So, where do you want to go?");
             foreach(string place in this.places)
             {
@@ -64,6 +66,7 @@ namespace Redemption
             location.civilized = true;
             location.places = new string[1];
             location.places[0] = "Forest";
+            location.locationLevel = 1;
             
         }
         
@@ -74,15 +77,41 @@ namespace Redemption
             location.places = new string[2];
             location.places[0] = "Town";
             location.places[1] = "Cave";
-            
+            location.locationLevel = 1;
+
         }
 
-        public void Idle()
+        public void GoToCave(Location location)
         {
+            location.name = "Cave";
+            location.civilized = false;
+            location.places = new string[1];
+            location.places[0] = "Forest";
+            location.locationLevel = 3;
+
+        }
+
+        public void Idle(Character character, Mob mob)
+        {
+            Console.WriteLine();
             Console.WriteLine("What now? You are in {0}", this.name);
             if (this.civilized != true) { Console.WriteLine("1. Search for a monster."); }
             else { Console.WriteLine("1. Go to shop."); }
             Console.WriteLine("2. Go to another place.");
+            Console.Write("Your choice: ");
+            int answer = Convert.ToInt32(Console.ReadLine());
+            switch (answer)
+            {
+                case 1:
+                    if(this.civilized != true) { character.SpotEnemy(mob, this.locationLevel); }
+                    else if(this.civilized==true) { //idz do sklepu
+                                                    }
+                    break;
+                case 2:
+                    this.ChooseLocation();
+                    break;
+            }
+
 
         }
 
