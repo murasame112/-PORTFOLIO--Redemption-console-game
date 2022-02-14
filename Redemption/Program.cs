@@ -77,6 +77,7 @@ namespace Redemption
 
 
             //playerCharacter.ReceiveItem(basicSword);
+
             while (true)
             {
                 // if( warunek questa) // dzieje sie spotkanie bossa

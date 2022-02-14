@@ -38,6 +38,7 @@ namespace Redemption
             Console.WriteLine("So, where do you want to go?");
             foreach(string place in this.places)
             {
+                // {i}. {place}.
                 Console.ResetColor();
                 Console.Write("{0}. ", i);
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -54,12 +55,14 @@ namespace Redemption
 
         public void GenerateLocation(string locationName, Location location)
         {
+            // You travel to {location name}.
             Console.WriteLine();
             Console.ResetColor();
-            Console.Write("You travel to ", locationName);
+            Console.Write("You travel to ");
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.WriteLine("{0}", locationName);
+            Console.Write("{0}", locationName);
             Console.ResetColor();
+            Console.WriteLine(".");
             int index = locationStrings.FindIndex(locationStrings => locationStrings.Contains(locationName));
             locationActions[index]();
 
@@ -107,6 +110,7 @@ namespace Redemption
 
         public void Idle(Character character, Mob mob,Shop shop)
         {
+            // You are in {place name}. What now?
             Console.WriteLine();
             Console.ResetColor();
             Console.Write("You are in ");

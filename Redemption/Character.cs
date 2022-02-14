@@ -34,8 +34,10 @@ namespace Redemption
         {
 
             Console.Write("Your name: ");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
             this.name = Console.ReadLine();
             this.UpdateStats();
+            Console.ResetColor();
             return this;
         }
 
@@ -62,6 +64,7 @@ namespace Redemption
 
         public void ShowStats()
         {
+            
             string[] itemNames = new string[3];
             itemNames[0] = "No sword equipped!";
             itemNames[1] = "No shield equipped!";
@@ -75,18 +78,78 @@ namespace Redemption
                 }
 
             }
+            /*
+            Your stats
+                Name: {character name}
+                Level: {character level}
+                Experience: {character experience}
+                Experience needed to level up: {character (max experience - experience)}
+                Gold: {character gold}
+            */ 
+             
+            Console.ResetColor();
             Console.WriteLine("Your stats");
             Console.WriteLine();
-            Console.WriteLine("Name: {0}", this.name);
-            Console.WriteLine("  Experience: {0}", this.experience);
-            Console.WriteLine("  Experience needed to level up: {0}", this.maxExperience - this.experience);
-            Console.WriteLine("  Gold: {0}", this.gold);
+            Console.Write("  Name: ");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("{0}", this.name);
+            Console.ResetColor();
+            Console.Write("  Level: ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("{0}", this.level);
+            Console.ResetColor();
+            Console.Write("  Experience: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("{0}", this.experience);
+            Console.ResetColor();
+            Console.Write("  Experience needed to level up: ");
+            Console.ForegroundColor = ConsoleColor.Cyan;
+            Console.WriteLine("{0}", this.maxExperience - this.experience);
+            Console.ResetColor();
+            Console.Write("  Gold: ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.WriteLine("{0}", this.gold);
 
+            /*
+            Current stats (with items equipeed)
+                Mana: {character max mana}
+            */
+            Console.ResetColor();
             Console.WriteLine("Current stats (with items equipped)");
-            Console.WriteLine("  Mana: {0}", this.maxMana);
-            Console.WriteLine("  Hp ({0}): {1}", itemNames[2], this.maxHp);
-            Console.WriteLine("  Armor ({0}): {1}", itemNames[1], this.currentArmor);
-            Console.WriteLine("  Attack ({0}): {1}", itemNames[0], this.currentAtk);
+            Console.Write("  Mana: ");
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.WriteLine("{0}", this.maxMana);
+            Console.ResetColor();
+
+            // Hp ({item name}): {max hp}
+            Console.Write("  Hp (");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("{0}", itemNames[2]);
+            Console.ResetColor();
+            Console.Write("): ");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.WriteLine("{0}", this.maxHp);
+            Console.ResetColor();
+
+            // Armor ({item name}): {current armor}
+            Console.Write("  Armor (");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("{0}", itemNames[1]);
+            Console.ResetColor();
+            Console.Write("): ");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.WriteLine("{0}", this.currentArmor);
+            Console.ResetColor();
+
+            // Attack ({item name}): {current attack}
+            Console.Write("  Attack (");
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("{0}", itemNames[0]);
+            Console.ResetColor();
+            Console.Write("): ");
+            Console.ForegroundColor = ConsoleColor.DarkCyan;
+            Console.WriteLine("{0}", this.currentAtk);
+            Console.ResetColor();
 
 
 
@@ -135,17 +198,41 @@ namespace Redemption
 
             string newItemStats = ItemStats(item, type);
 
-
+            bool noItem = true;
             string statsToCompare = "which, apparently, you don't have";
             if (CheckForItems(type))
             {
+                noItem = false;
                 statsToCompare = ItemStats(this.items[type], type);
             }
 
-
+            // You've received an item! It's a {item type}, which is called {item name} ({item stat})
+            Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine("You've received an item! It's a {0}, which is called {1} ({2})", itemType, item.name, newItemStats);
-            Console.WriteLine("Do you want to replace your {0} ({1})? ", itemType, statsToCompare);
+            Console.Write("You've received an item! It's a {0}, which is called ", itemType);
+            Console.ForegroundColor = ConsoleColor.Blue;
+            Console.Write("{0}", item.name);
+            Console.ResetColor();
+            Console.Write(" (");
+            if(type == 0) { Console.ForegroundColor = ConsoleColor.DarkCyan; }
+            else if(type == 1) { Console.ForegroundColor = ConsoleColor.DarkMagenta; }
+            else if(type == 2) { Console.ForegroundColor = ConsoleColor.DarkRed; }
+            Console.Write("{0}", newItemStats);
+            Console.ResetColor();
+            Console.WriteLine(")");
+
+
+            // Do you want to replace your {item type} ({item stat})? 
+            Console.Write("Do you want to replace your {0} (", itemType);
+            if (noItem == false) 
+            {
+                if (type == 0) { Console.ForegroundColor = ConsoleColor.DarkCyan; }
+                else if (type == 1) { Console.ForegroundColor = ConsoleColor.DarkMagenta; }
+                else if (type == 2) { Console.ForegroundColor = ConsoleColor.DarkRed; } 
+            }
+            Console.Write("{0}", statsToCompare);
+            Console.ResetColor();
+            Console.WriteLine(")?");
             Console.WriteLine("1. Yes");
             Console.WriteLine("2. No");
             int answer = Convert.ToInt32(Console.ReadLine());
@@ -159,10 +246,6 @@ namespace Redemption
                     break;
             }
 
-
-
-
-
             this.UpdateStats();
         }
 
@@ -173,12 +256,27 @@ namespace Redemption
             return this.items.ElementAtOrDefault(id) != null;
 
         }
+
         public void SpotEnemy(Mob mob, int locationLevel, List<string> genericMobNames)
         {
+            
             Random rand = new Random();
             int mobNameNumber = rand.Next(0, genericMobNames.Count - 1);
             mob.CreateGenericMob(locationLevel, genericMobNames[mobNameNumber]);
-            Console.WriteLine("You spot a monster! It's {0} with level {1}.", mob.name, mob.level);
+            //You spot a monster! It's {monster name} with level {level}.
+            Console.ResetColor();
+
+            Console.Write("You spot a monster! It's ");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("{0} ", mob.name);
+            Console.ResetColor();
+            Console.Write("with level ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", mob.level);
+            Console.ResetColor();
+            Console.WriteLine(".");
+
+
             Console.WriteLine("Do you want to fight?");
             Console.WriteLine("1. Yes.");
             Console.WriteLine("2. No.");
@@ -199,22 +297,50 @@ namespace Redemption
             int damage = (atk - armor);
             unitAttacked.currentHp -= damage;
             if (unitAttacked.currentHp <= 0) { unitAttacked.currentHp = 0; }
-            Console.WriteLine("{0} attacks for {1}, {2} has {3} hp left", unitAttacking.name, damage, unitAttacked.name, unitAttacked.currentHp);
+            // {unit attacking} attacks for {damage}, {unit attacked} has {current hp of attacked unit} hp left.
+            Console.ResetColor();
+            if (unitAttacking.GetType() == typeof(Character)) { Console.ForegroundColor = ConsoleColor.DarkGreen; }
+            else if (unitAttacking.GetType() == typeof(Mob)) { Console.ForegroundColor = ConsoleColor.DarkGray; }
+            Console.Write("{0}", unitAttacking.name);
+            Console.ResetColor();
+            Console.Write(" attacks for ");
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.Write("{0}", damage);
+            Console.ResetColor();
+            Console.Write(", ");
+            if (unitAttacked.GetType() == typeof(Character)) { Console.ForegroundColor = ConsoleColor.DarkGreen; }
+            else if (unitAttacked.GetType() == typeof(Mob)) { Console.ForegroundColor = ConsoleColor.DarkGray; }
+            Console.Write("{0}", unitAttacked.name);
+            Console.ResetColor();
+            Console.Write(" has ");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write("{0}", unitAttacked.currentHp);
+            Console.ResetColor();
+            Console.WriteLine(" hp left.");
 
         }
 
         public void ChooseSpell()
         {
             int i = 1;
+            Console.ResetColor();
             Console.WriteLine();
-            Console.WriteLine("Current mana: {0}", this.currentMana);
+            // Current mana: {character mana}
+            Console.Write("Current mana: ");
+            Console.ForegroundColor = ConsoleColor.DarkBlue;
+            Console.WriteLine("{0}", this.currentMana);
+            Console.ResetColor();
             Console.WriteLine("Your spells: ");
-            //foreach (Action spell in spells)
+            
+            // {number}. {spell name}
             foreach (string spell in spellsString)
             {
 
 
-                Console.WriteLine("{0}. {1}", i, spell);
+                Console.Write("{0}. ", i);
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.WriteLine("{0}", spell);
+                Console.ResetColor();
                 i++;
             }
 
@@ -238,11 +364,40 @@ namespace Redemption
                 int damage = (this.currentAtk + 1) - target.baseArmor;
                 target.currentHp -= damage;
                 if (target.currentHp <= 0) { target.currentHp = 0; }
-                Console.WriteLine("{0} attacks with Tide Thrust for {1}, {2} has {3} hp left", this.name, damage, target.name, target.currentHp);
+                // {character name} attacks with Tide Thrust for {damage}, {mob name} has {mob current hp} hp left.
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write("{0}", this.name);
+                Console.ResetColor();
+                Console.Write(" attacks with ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Tide Thrust");
+                Console.ResetColor();
+                Console.Write(" for ");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("{0}", damage);
+                Console.ResetColor();
+                Console.Write(", ");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.Write("{0}", target.name);
+                Console.ResetColor();
+                Console.Write(" has ");
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("{0}", target.currentHp);
+                Console.ResetColor();
+                Console.WriteLine(" hp left.");
+
             }
             else
             {
-                Console.WriteLine("Tide Thrust fails! {0} has not enough mana... What a waste of time.", this.name);
+                // Tide Thrust fails! {0} has not enough mana... What a waste of time.
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Tide Thrust");
+                Console.ResetColor();
+                Console.Write(" fails! ");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write("{0}", this.name);
+                Console.ResetColor();
+                Console.Write(" has not enough mana... What a waste of time.");
             }
 
 

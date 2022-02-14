@@ -37,6 +37,7 @@ namespace Redemption
 
                 if (item.GetType() == typeof(Sword))
                 {
+                    // {item number}. {item name}, attack value: {stat}, {gold} gold
                     Console.Write("{0}. ", i);
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("{0}", item.name);
@@ -64,6 +65,7 @@ namespace Redemption
 
                 if (item.GetType() == typeof(Shield))
                 {
+                    // {item number}. {item name}, armor value: {stat}, {gold} gold
                     Console.Write("{0}. ", i);
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("{0}", item.name);
