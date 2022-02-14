@@ -38,7 +38,12 @@ namespace Redemption
             Console.WriteLine("So, where do you want to go?");
             foreach(string place in this.places)
             {
-                Console.WriteLine("{0}. {1}", i, place);
+                Console.ResetColor();
+                Console.Write("{0}. ", i);
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write("{0}", place);
+                Console.ResetColor();
+                Console.WriteLine(".");
                 i++;
             }
             Console.Write("Your choice: ");
@@ -49,7 +54,12 @@ namespace Redemption
 
         public void GenerateLocation(string locationName, Location location)
         {
-            Console.WriteLine("You travel to {0}", locationName);
+            Console.WriteLine();
+            Console.ResetColor();
+            Console.Write("You travel to ", locationName);
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.WriteLine("{0}", locationName);
+            Console.ResetColor();
             int index = locationStrings.FindIndex(locationStrings => locationStrings.Contains(locationName));
             locationActions[index]();
 
@@ -98,7 +108,14 @@ namespace Redemption
         public void Idle(Character character, Mob mob,Shop shop)
         {
             Console.WriteLine();
-            Console.WriteLine("What now? You are in {0}", this.name);
+            Console.ResetColor();
+            Console.Write("You are in ");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("{0}", this.name);
+            Console.ResetColor();
+            Console.WriteLine(". What now?");
+
+
             if (this.civilized != true) { Console.WriteLine("1. Search for a monster."); }
             else { Console.WriteLine("1. Go to shop."); }
             Console.WriteLine("2. Go to another place.");

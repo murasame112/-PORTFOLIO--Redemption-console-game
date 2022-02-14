@@ -28,41 +28,89 @@ namespace Redemption
 
         public int ShowShopItemsList(int i)
         {
+            Console.ResetColor();
             Console.WriteLine("Swords: ");
+            
+            
             foreach (Item item in this.shopItemList)
             {
 
                 if (item.GetType() == typeof(Sword))
                 {
-                    Console.WriteLine("{0}. {1}, attack value: {2}, {3} gold", i, item.name, item.stat, item.price);
+                    Console.Write("{0}. ", i);
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("{0}", item.name);
+                    Console.ResetColor();
+                    Console.Write(", attack value: ");
+                    Console.ForegroundColor = ConsoleColor.DarkCyan;
+                    Console.Write("{0}", item.stat);
+                    Console.ResetColor();
+                    Console.Write(", ");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write("{0} ", item.price);
+                    Console.ResetColor();
+                    Console.WriteLine("gold");
+                    Console.ResetColor();
                     i++;
                 }
 
             }
 
+            Console.ResetColor();
             Console.WriteLine("Shields: ");
+            
             foreach (Item item in this.shopItemList)
             {
 
                 if (item.GetType() == typeof(Shield))
                 {
-                    Console.WriteLine("{0}. {1}, armor value: {2}, {3} gold", i, item.name, item.stat, item.price);
+                    Console.Write("{0}. ", i);
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("{0}", item.name);
+                    Console.ResetColor();
+                    Console.Write(", armor value: ");
+                    Console.ForegroundColor = ConsoleColor.DarkMagenta;
+                    Console.Write("{0}", item.stat);
+                    Console.ResetColor();
+                    Console.Write(", ");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write("{0} ", item.price);
+                    Console.ResetColor();
+                    Console.WriteLine("gold");
+                    Console.ResetColor();
                     i++;
                 }
 
             }
 
+            Console.ResetColor();
             Console.WriteLine("Breastplates: ");
+            
             foreach (Item item in this.shopItemList)
             {
 
                 if (item.GetType() == typeof(Breastplate))
                 {
-                    Console.WriteLine("{0}. {1}, hp value: {2}, {3} gold", i, item.name, item.stat, item.price);
+                    // {item number}. {item name}, hp value: {stat}, {gold} gold
+                    Console.Write("{0}. ", i);
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("{0}", item.name);
+                    Console.ResetColor();
+                    Console.Write(", hp value: ");
+                    Console.ForegroundColor = ConsoleColor.DarkRed;
+                    Console.Write("{0}", item.stat);
+                    Console.ResetColor();
+                    Console.Write(", ");
+                    Console.ForegroundColor = ConsoleColor.DarkYellow;
+                    Console.Write("{0} ", item.price);
+                    Console.ResetColor();
+                    Console.WriteLine("gold");
+                    Console.ResetColor();
                     i++;
                 }
 
             }
+            Console.ResetColor();
 
             return i;
         }
