@@ -15,6 +15,8 @@ namespace Redemption
         public int maxHp { get; set; }
         public Item[] items = new Item[3];
         public int maxExperience { get; set; }
+        public int maxMana { get; set; } 
+        public int currentMana { get; set; }
         public Character()
         {
             this.name = "Gustav";
@@ -25,16 +27,16 @@ namespace Redemption
             this.experience = 0;
             this.maxExperience = 5;
             this.gold = 0;
-
+            this.maxMana = 10;
         }
 
-        public Character CreateCharacter(Character defaultCharacter)
+        public Character CreateCharacter()
         {
 
             Console.Write("Your name: ");
             this.name = Console.ReadLine();
-            UpdateStats();
-            return defaultCharacter;
+            this.UpdateStats();
+            return this;
         }
 
         public void UpdateStats()
@@ -42,7 +44,6 @@ namespace Redemption
             this.currentAtk = baseAtk;
             this.maxHp = baseHp;
             this.currentArmor = baseArmor;
-            
             if (CheckForItems(0))
             {
                 this.currentAtk += items[0].stat;
@@ -55,7 +56,7 @@ namespace Redemption
             {
                 this.maxHp += items[2].stat;
             }
-
+            this.currentMana = this.maxMana;
             this.currentHp = this.maxHp;
         }
 
@@ -82,6 +83,7 @@ namespace Redemption
             Console.WriteLine("  Gold: {0}", this.gold);
 
             Console.WriteLine("Current stats (with items equipped)");
+            Console.WriteLine("  Mana: {0}", this.maxMana);
             Console.WriteLine("  Hp ({0}): {1}", itemNames[2], this.maxHp);
             Console.WriteLine("  Armor ({0}): {1}", itemNames[1], this.currentArmor);
             Console.WriteLine("  Attack ({0}): {1}", itemNames[0], this.currentAtk);
@@ -161,7 +163,7 @@ namespace Redemption
 
 
 
-            UpdateStats();
+            this.UpdateStats();
         }
 
 
@@ -171,9 +173,11 @@ namespace Redemption
             return this.items.ElementAtOrDefault(id) != null;
 
         }
-        public void SpotEnemy(Mob mob, int locationLevel)
+        public void SpotEnemy(Mob mob, int locationLevel, List<string> genericMobNames)
         {
-            mob.CreateGenericMob(locationLevel, "Goblin named Gobberton");
+            Random rand = new Random();
+            int mobNameNumber = rand.Next(0, genericMobNames.Count - 1);
+            mob.CreateGenericMob(locationLevel, genericMobNames[mobNameNumber]);
             Console.WriteLine("You spot a monster! It's {0} with level {1}.", mob.name, mob.level);
             Console.WriteLine("Do you want to fight?");
             Console.WriteLine("1. Yes.");
@@ -183,7 +187,7 @@ namespace Redemption
             switch (answer)
             {
                 case 1:
-                    this.Fight(this, mob);
+                    this.Fight(mob);
                     break;
                 case 2:
                     break;
@@ -194,8 +198,8 @@ namespace Redemption
         {
             int damage = (atk - armor);
             unitAttacked.currentHp -= damage;
-            if(unitAttacked.currentHp <= 0) { unitAttacked.currentHp = 0; }
-            Console.WriteLine("{0} attacks for {1}, {2} has {3} hp left",unitAttacking.name, damage, unitAttacked.name, unitAttacked.currentHp);
+            if (unitAttacked.currentHp <= 0) { unitAttacked.currentHp = 0; }
+            Console.WriteLine("{0} attacks for {1}, {2} has {3} hp left", unitAttacking.name, damage, unitAttacked.name, unitAttacked.currentHp);
 
         }
 
@@ -203,53 +207,77 @@ namespace Redemption
         {
             int i = 1;
             Console.WriteLine();
+            Console.WriteLine("Current mana: {0}", this.currentMana);
             Console.WriteLine("Your spells: ");
             //foreach (Action spell in spells)
-            foreach(string spell in spellsString)
+            foreach (string spell in spellsString)
             {
-                
 
-                Console.WriteLine("{0}. {1}",i, spell);
+
+                Console.WriteLine("{0}. {1}", i, spell);
                 i++;
             }
+
             Console.Write("Choose spell: ");
             int spellNumber = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine();
-            spells[spellNumber-1]();
-
+            Console.WriteLine();                
+            spells[spellNumber - 1]();
             
+
+
 
         }
 
         public void TideThrust(Mob target)
         {
-            int damage = (this.currentAtk + 1) - target.baseArmor;
-            target.currentHp -= damage;
-            if(target.currentHp <= 0) { target.currentHp = 0; }
-            Console.WriteLine("{0} attacks with Tide Thrust for {1}, {2} has {3} hp left", this.name, damage, target.name, target.currentHp);
+            int manaCost = 5;
+
+            if (this.currentMana >= manaCost)
+            {
+                this.currentMana -= manaCost;
+                int damage = (this.currentAtk + 1) - target.baseArmor;
+                target.currentHp -= damage;
+                if (target.currentHp <= 0) { target.currentHp = 0; }
+                Console.WriteLine("{0} attacks with Tide Thrust for {1}, {2} has {3} hp left", this.name, damage, target.name, target.currentHp);
+            }
+            else
+            {
+                Console.WriteLine("Tide Thrust fails! {0} has not enough mana... What a waste of time.", this.name);
+            }
 
 
         }
 
         public void Rathonhnhaketon()
         {
-            int hpHealed = this.maxHp/5;
-            if (this.maxHp < this.currentHp + hpHealed) { hpHealed = this.maxHp - this.currentHp; }
+            int manaCost = 10;
 
-            this.currentHp += hpHealed;
-            Console.WriteLine("{0} heals for {1} hp. ", this.name, hpHealed);
+            if (this.currentMana >= manaCost)
+            {
+                this.currentMana -= manaCost;
+                int hpHealed = this.maxHp / 5;
+                if (this.maxHp < this.currentHp + hpHealed) { hpHealed = this.maxHp - this.currentHp; }
+
+                this.currentHp += hpHealed;
+                Console.WriteLine("{0} heals for {1} hp. ", this.name, hpHealed);
+            }
+            else
+            {
+                Console.WriteLine("Rathonhnhaketon fails! {0} has not enough mana... What a waste of time.", this.name);
+            }
         }
 
         public string AnnounceWinner(Unit unitWinner, Unit unitLoser)
         {
-            string result = unitWinner.name + " was victorious! " + unitLoser.name + " has been slain." ;
+            string result = unitWinner.name + " was victorious! " + unitLoser.name + " has been slain.";
 
-            
+
             return result;
         }
 
         public void GainGold(int goldGained)
         {
+            this.gold += goldGained;
             Console.WriteLine("{0} gold gained.", goldGained);
 
         }
@@ -258,7 +286,7 @@ namespace Redemption
         {
             Console.WriteLine("{0} has gained {1} experience from this fight.", this.name, expGained);
             this.experience += expGained;
-            if(this.experience >= maxExperience)
+            if (this.experience >= maxExperience)
             {
                 this.experience = 0;
                 this.LevelUp();
@@ -273,49 +301,62 @@ namespace Redemption
             this.baseHp += 5;
             this.experience = 0;
             this.maxExperience += 5;
+            this.maxMana += 5;
+            this.UpdateStats();
             Console.WriteLine("{0} has gained level {1}!", this.name, this.level);
         }
 
-        public void Fight(Character character, Mob mob)
+        public bool Flee(Mob mob)
         {
+            this.gold -= mob.gold;
+            this.experience = 0;
+            Console.WriteLine("{0} runs away! All experience and {1} gold lost!", this.name, mob.gold);
+            
+            return true;
+        }
+
+        public void Fight(Mob mob)
+        {
+            bool characterFlee = false;
             Console.WriteLine("Get ready to fight! You face {0}, with level {1}", mob.name, mob.level);
             Console.WriteLine();
             Console.WriteLine("{0} has {1} hp and {2} armor", mob.name, mob.currentHp, mob.baseArmor);
-            while (character.currentHp > 0 && mob.currentHp > 0)
+            while (this.currentHp > 0 && mob.currentHp > 0 && characterFlee == false)
             {
                 Console.WriteLine();
                 Console.WriteLine("What action do you perform?");
                 Console.WriteLine("1. Attack");
-                Console.WriteLine("2. Use spell");
+                Console.WriteLine("2. Use spell (current mana: {0})",   this.currentMana);
                 Console.WriteLine("3. Flee");
                 Console.Write("Your action: ");
                 int action = Convert.ToInt32(Console.ReadLine());
                 switch (action)
                 {
                     case 1:
-                        Attack(character, mob, character.currentAtk, mob.baseArmor);
+                        Attack(this, mob, this.currentAtk, mob.baseArmor);
                         break;
                     case 2:
                         ChooseSpell();
                         break;
                     case 3:
+                        characterFlee = this.Flee(mob);
                         break;
                 }
 
                 Console.WriteLine();
 
-                if (mob.currentHp > 0) { Attack(mob, character, mob.baseAtk, character.currentArmor); }
+                if (mob.currentHp > 0 && characterFlee == false) { Attack(mob, this, mob.baseAtk, this.currentArmor); }
             }
-            if (character.currentHp > 0)
+            if (this.currentHp > 0 && characterFlee == false)
             {
                 UpdateStats();
-                Console.WriteLine(AnnounceWinner(character, mob));
-                character.GainExp(mob.DropExp());
-                character.GainGold(mob.DropGold());
+                Console.WriteLine(AnnounceWinner(this, mob));
+                this.GainExp(mob.DropExp());
+                this.GainGold(mob.DropGold());
                 
-            }else if (mob.currentHp > 0)
+            }else if (mob.currentHp > 0 && characterFlee == false)
             {
-                Console.WriteLine(AnnounceWinner(mob, character));
+                Console.WriteLine(AnnounceWinner(mob, this));
             }
             
             
@@ -325,12 +366,12 @@ namespace Redemption
         }
 
 
-        public void GoShopping(List<Item> listOfItems)
+        public void GoShopping(Shop shop)
         {
             Console.WriteLine();
             Console.WriteLine("Welcome to the shop! Find yourself something useful.");
             int i = 1;
-            i = ShowShopItemsList(listOfItems, i);
+            i = shop.ShowShopItemsList(i);
            
             Console.WriteLine("{0}. Leave.", i);
 
@@ -340,13 +381,13 @@ namespace Redemption
             
             int answer = Convert.ToInt32(Console.ReadLine());
             answer -= 1;
-            if (answer != listOfItems.Count)
+            if (answer != shop.shopItemList.Count)
             {
-                if (listOfItems[answer].price <= this.gold)
+                if (shop.shopItemList[answer].price <= this.gold)
                 {
-                    this.gold -= listOfItems[answer].price;
-                    this.ReceiveItem(listOfItems[answer]);
-                    Console.WriteLine("Thanks for buying {0}!", listOfItems[answer].name);
+                    this.gold -= shop.shopItemList[answer].price;
+                    this.ReceiveItem(shop.shopItemList[answer]);
+                    Console.WriteLine("Thanks for buying the {0}!", shop.shopItemList[answer].name);
                 }
                 else
                 {
@@ -356,46 +397,7 @@ namespace Redemption
            
         }
 
-        public int ShowShopItemsList(List<Item> listOfItems, int i)
-        {
-            Console.WriteLine("Swords: ");
-            foreach (Item item in listOfItems)
-            {
-
-                if (item.GetType() == typeof(Sword))
-                {
-                    Console.WriteLine("{0}. {1}, attack value: {2}, {3} gold", i, item.name, item.stat, item.price);
-                    i++;
-                }
-
-            }
-
-            Console.WriteLine("Shields: ");
-            foreach (Item item in listOfItems)
-            {
-
-                if (item.GetType() == typeof(Shield))
-                {
-                    Console.WriteLine("{0}. {1}, armor value: {2}, {3} gold", i, item.name, item.stat, item.price);
-                    i++;
-                }
-
-            }
-
-            Console.WriteLine("Breastplates: ");
-            foreach (Item item in listOfItems)
-            {
-
-                if (item.GetType() == typeof(Breastplate))
-                {
-                    Console.WriteLine("{0}. {1}, hp value: {2}, {3} gold", i, item.name, item.stat, item.price);
-                    i++;
-                }
-
-            }
-
-            return i;
-        }
+        
 
     }
 }

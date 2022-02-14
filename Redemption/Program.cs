@@ -12,13 +12,9 @@ namespace Redemption
         - przeciwnicy nie mają itemów, ale mają mocniejsze staty (moga byc defaultowo liczone ze wzoru zaleznie od levela)
 
     todo:
-        - funkcja tworzenia custom mobka
-        - boss w jaskini? po np zabiciu 5 mobów?
-        - mechanizm ucieczki (jaka kara za ucieczke?)
-        - mana? możliwość użycia x spelli na walkę? (tyle ile level lub level *2)?
-        - dopilnowac, by tam gdzie gracz cos wprowadza nie bylo bledow (ze np zamiast 1 lub 2 poda liczbe 33 lub napisze "żuraw")
-        - dodać mozliwosc anulowania spella zeby np wybrac jednak atak
+        - boss w jaskini? po np zabiciu 5 mobów? (QUESTY)
 
+        - dopilnowac, by tam gdzie gracz cos wprowadza nie bylo bledow (ze np zamiast 1 lub 2 poda liczbe 33 lub napisze "żuraw")
         - OGÓLNE REDAGOWANIE TEKSTÓW (KROPKI, KOLORY LITER, ODPOWIEDNIE WCIĘCIA ITP.)
         - SPRZĄTANIE KODU (FUNKCJE W ODPOWIEDNIEJ KOLEJNOŚCI, ESTETYKA, REFAKTORYZACJA)
         
@@ -31,10 +27,10 @@ namespace Redemption
     {
         static void Main(string[] args)
         {
-            List<Item> shopItemList = new List<Item>();
+            Shop shop = new Shop();
             
             Character playerCharacter = new Character();
-            playerCharacter.CreateCharacter(playerCharacter);
+            playerCharacter.CreateCharacter();
 
             Location location = new Location();
             
@@ -53,28 +49,27 @@ namespace Redemption
 
             Mob target = new Mob();
 
-            shopItemList.Add(basicSword);
-            shopItemList.Add(greatSword);
-            shopItemList.Add(claymore);
-            shopItemList.Add(omniblade);
-            shopItemList.Add(buckler);
-            shopItemList.Add(spellShield);
-            shopItemList.Add(leatherArmor);
-            shopItemList.Add(scaleBreastplate);
-            shopItemList.Add(chainmail);
+            shop.AddToShop(basicSword);
+            shop.AddToShop(greatSword);
+            shop.AddToShop(claymore);
+            shop.AddToShop(omniblade);
+            shop.AddToShop(buckler);
+            shop.AddToShop(spellShield);
+            shop.AddToShop(leatherArmor);
+            shop.AddToShop(scaleBreastplate);
+            shop.AddToShop(chainmail);
 
             playerCharacter.spells.Add(() => playerCharacter.TideThrust(target));
             playerCharacter.spells.Add(playerCharacter.Rathonhnhaketon);
-            playerCharacter.spellsString.Add("Tide Thrust (move your blade like wave, to make lunge stronger than usual attack [+1 damage]).");
-            playerCharacter.spellsString.Add("Rathonhnhake-ton (perform a quick ritual, that will restore your health [20% heal]).");
+            playerCharacter.spellsString.Add("Tide Thrust [+1 damage, 5 mana] (move your blade like wave, to make lunge stronger than usual attack).");
+            playerCharacter.spellsString.Add("Rathonhnhake-ton [40% heal, 10 mana] (perform a quick ritual, that will restore your health).");
+
+
             playerCharacter.ReceiveItem(basicSword);
             
 
-            Mob goblin = new Mob();
             
-            goblin.CreateGenericMob( 2, "Goblin named Gobberton");
-            target = goblin;
-            //playerCharacter.Fight(playerCharacter, target);
+
 
             
             location.locationStrings.Add("Town");
@@ -86,7 +81,7 @@ namespace Redemption
             
             while(true)
             {
-                location.Idle(playerCharacter, target, shopItemList);
+                location.Idle(playerCharacter, target, shop);
 
             }
 

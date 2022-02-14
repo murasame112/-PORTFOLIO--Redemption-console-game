@@ -11,10 +11,12 @@ namespace Redemption
 
         public List<string> locationStrings = new List<string>();
         public List<Action> locationActions = new List<Action>();
+        public List<string> genericMobNames;
         public string name {get; set;}
         public string[] places { get; set; }
         public bool civilized { get; set; }
         public int locationLevel { get; set; }
+
 
 
         public Location()
@@ -23,13 +25,9 @@ namespace Redemption
             this.civilized = true;
             this.places = new string[1];
             places[0] = "Forest";
+            this.genericMobNames = new List<string>();
 
-        }
 
-        public void CreateLocation(string locationName, Action locationMethod)
-        {
-            //list 1 add string
-            //list 2 add action (parametry places?)
         }
 
         public void ChooseLocation()
@@ -65,6 +63,7 @@ namespace Redemption
             location.places[0] = "Forest";
             location.locationLevel = 1;
             
+            
         }
         
         public void GoToForest(Location location)
@@ -75,6 +74,10 @@ namespace Redemption
             location.places[0] = "Town";
             location.places[1] = "Cave";
             location.locationLevel = 1;
+            this.genericMobNames.Clear();
+            this.genericMobNames.Add("Goblin Gatherer");
+            this.genericMobNames.Add("Feral Wolf");
+            this.genericMobNames.Add("Goblin Soldier");
 
         }
 
@@ -85,10 +88,14 @@ namespace Redemption
             location.places = new string[1];
             location.places[0] = "Forest";
             location.locationLevel = 3;
+            this.genericMobNames.Clear();
+            this.genericMobNames.Add("Goblin Guardian");
+            this.genericMobNames.Add("Goblin Warrior");
+
 
         }
 
-        public void Idle(Character character, Mob mob, List<Item> shopItemList)
+        public void Idle(Character character, Mob mob,Shop shop)
         {
             Console.WriteLine();
             Console.WriteLine("What now? You are in {0}", this.name);
@@ -101,8 +108,8 @@ namespace Redemption
             switch (answer)
             {
                 case 1:
-                    if(this.civilized != true) { character.SpotEnemy(mob, this.locationLevel); }
-                    else if(this.civilized==true) { character.GoShopping(shopItemList); }
+                    if(this.civilized != true) { character.SpotEnemy(mob, this.locationLevel, this.genericMobNames); }
+                    else if(this.civilized==true) { character.GoShopping(shop); }
                     break;
                 case 2:
                     this.ChooseLocation();

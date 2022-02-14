@@ -35,8 +35,18 @@ namespace Redemption
             this.experience = 1 * level;
             Random rand = new Random();
             this.gold = rand.Next(level, (3 * level)-1);
+        }
 
-
+        public void CreateCustomMob(int level, string name, int baseArmor, int baseAtk, int baseHp, int experience, int gold)
+        {
+            this.level = level;
+            this.name = name;
+            this.baseArmor = baseArmor;
+            this.baseAtk = baseAtk;
+            this.baseHp = baseHp;
+            this.currentHp = this.baseHp;
+            this.experience = experience;
+            this.gold = gold;
         }
         
         public int DropExp()
