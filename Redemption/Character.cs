@@ -389,7 +389,7 @@ namespace Redemption
             }
             else
             {
-                // Tide Thrust fails! {0} has not enough mana... What a waste of time.
+                // Tide Thrust fails! {character name} has not enough mana... What a waste of time.
                 Console.ForegroundColor = ConsoleColor.Magenta;
                 Console.Write("Tide Thrust");
                 Console.ResetColor();
@@ -397,7 +397,7 @@ namespace Redemption
                 Console.ForegroundColor = ConsoleColor.DarkGreen;
                 Console.Write("{0}", this.name);
                 Console.ResetColor();
-                Console.Write(" has not enough mana... What a waste of time.");
+                Console.WriteLine(" has not enough mana... What a waste of time.");
             }
 
 
@@ -414,11 +414,30 @@ namespace Redemption
                 if (this.maxHp < this.currentHp + hpHealed) { hpHealed = this.maxHp - this.currentHp; }
 
                 this.currentHp += hpHealed;
-                Console.WriteLine("{0} heals for {1} hp. ", this.name, hpHealed);
+
+                // {character name} heals for {healed hp} hp.
+
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write("{0}", this.name);
+                Console.ResetColor();
+                Console.Write(" heals for ");
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("{0}", hpHealed);
+                Console.ResetColor();
+                Console.WriteLine(" hp.");
             }
             else
             {
-                Console.WriteLine("Rathonhnhaketon fails! {0} has not enough mana... What a waste of time.", this.name);
+                // Rathonhnhaketon fails! {character name} has not enough mana... What a waste of time.
+
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Rathonhnhaketon");
+                Console.ResetColor();
+                Console.Write(" fails! ");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write("{0}", this.name);
+                Console.ResetColor();
+                Console.WriteLine(" has not enough mana... What a waste of time.");
             }
         }
 
@@ -433,13 +452,26 @@ namespace Redemption
         public void GainGold(int goldGained)
         {
             this.gold += goldGained;
-            Console.WriteLine("{0} gold gained.", goldGained);
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            //{gained gold} gold gained.
+            Console.Write("{0}", goldGained);
+            Console.ResetColor();
+            Console.WriteLine(" gold gained.");
 
         }
 
         public void GainExp(int expGained)
         {
-            Console.WriteLine("{0} has gained {1} experience from this fight.", this.name, expGained);
+            // "{character name} has gained {gained experience} experience from this fight.
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("{0}", this.name);
+            Console.ResetColor();
+            Console.Write(" has gained ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", expGained);
+            Console.ResetColor();
+            Console.WriteLine(" experience from this fight.");
+
             this.experience += expGained;
             if (this.experience >= maxExperience)
             {
@@ -458,14 +490,36 @@ namespace Redemption
             this.maxExperience += 5;
             this.maxMana += 5;
             this.UpdateStats();
-            Console.WriteLine("{0} has gained level {1}!", this.name, this.level);
+
+            //{character name} has gained level {gained level}!
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("{0}", this.name);
+            Console.ResetColor();
+            Console.Write(" has gained level ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", this.level);
+            Console.ResetColor();
+            Console.WriteLine("!");
         }
 
         public bool Flee(Mob mob)
         {
             this.gold -= mob.gold;
             this.experience = 0;
-            Console.WriteLine("{0} runs away! All experience and {1} gold lost!", this.name, mob.gold);
+            // {character name} runs away! All experience and {mob gold} gold lost!
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("{0}", this.name);
+            Console.ResetColor();
+            Console.Write(" runs away! ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("All");
+            Console.ResetColor();
+            Console.Write(" experience and ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("{0}", mob.gold);
+            Console.ResetColor();
+            Console.WriteLine(" gold lost!");
+
             
             return true;
         }
@@ -473,15 +527,46 @@ namespace Redemption
         public void Fight(Mob mob)
         {
             bool characterFlee = false;
-            Console.WriteLine("Get ready to fight! You face {0}, with level {1}", mob.name, mob.level);
+            // Get ready to fight! You face {mob name}, with level {mob level}.
+            Console.ResetColor();
+            Console.Write("Get ready to fight! You face ");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("{0}", mob.name);
+            Console.ResetColor();
+            Console.Write(", with level ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", mob.level);
+            Console.ResetColor();
+            Console.WriteLine(".");
             Console.WriteLine();
-            Console.WriteLine("{0} has {1} hp and {2} armor", mob.name, mob.currentHp, mob.baseArmor);
+
+            //{mob name} has {mob current hp} hp and {mob base armor} armor
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("{0}", mob.name);
+            Console.ResetColor();
+            Console.Write(" has ");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write("{0}", mob.currentHp);
+            Console.ResetColor();
+            Console.Write(" hp and ");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.Write("{0}", mob.baseArmor);
+            Console.ResetColor();
+            Console.WriteLine(" armor.");
+            
+
+
             while (this.currentHp > 0 && mob.currentHp > 0 && characterFlee == false)
             {
+                Console.ResetColor();
                 Console.WriteLine();
                 Console.WriteLine("What action do you perform?");
                 Console.WriteLine("1. Attack");
-                Console.WriteLine("2. Use spell (current mana: {0})",   this.currentMana);
+                Console.Write("2. Use spell (current mana: ");
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.Write("{0}", this.currentMana);
+                Console.ResetColor();
+                Console.WriteLine(")");
                 Console.WriteLine("3. Flee");
                 Console.Write("Your action: ");
                 int action = Convert.ToInt32(Console.ReadLine());
@@ -505,13 +590,17 @@ namespace Redemption
             if (this.currentHp > 0 && characterFlee == false)
             {
                 UpdateStats();
+                Console.ForegroundColor = ConsoleColor.Green;
                 Console.WriteLine(AnnounceWinner(this, mob));
+                Console.ResetColor();
                 this.GainExp(mob.DropExp());
                 this.GainGold(mob.DropGold());
                 
             }else if (mob.currentHp > 0 && characterFlee == false)
             {
+                Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(AnnounceWinner(mob, this));
+                Console.ResetColor();
             }
             
             
@@ -524,14 +613,20 @@ namespace Redemption
         public void GoShopping(Shop shop)
         {
             Console.WriteLine();
+            Console.ResetColor();
             Console.WriteLine("Welcome to the shop! Find yourself something useful.");
             int i = 1;
             i = shop.ShowShopItemsList(i);
            
             Console.WriteLine("{0}. Leave.", i);
 
+            // Your gold: {character gold}.
             Console.WriteLine();
-            Console.WriteLine("Your gold: {0}.", this.gold);
+            Console.Write("Your gold: ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("{0}", this.gold);
+            Console.ResetColor();
+            Console.WriteLine(".");
             Console.Write("Your answer: ");
             
             int answer = Convert.ToInt32(Console.ReadLine());
@@ -542,7 +637,12 @@ namespace Redemption
                 {
                     this.gold -= shop.shopItemList[answer].price;
                     this.ReceiveItem(shop.shopItemList[answer]);
-                    Console.WriteLine("Thanks for buying the {0}!", shop.shopItemList[answer].name);
+                    // Thanks for buying the {item name from shop's list}!
+                    Console.Write("Thanks for buying the ");
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("{0}", shop.shopItemList[answer].name);
+                    Console.ResetColor();
+                    Console.WriteLine("!");
                 }
                 else
                 {

@@ -31,9 +31,10 @@ namespace Redemption
 
     class Program
     {
+        
         static void Main(string[] args)
         {
-
+            
             Character playerCharacter = new Character();
             playerCharacter.CreateCharacter();
 
@@ -84,11 +85,7 @@ namespace Redemption
                 location.Idle(playerCharacter, target, shop);
 
             }
-
-
-
-
-
+            
 
 
 
