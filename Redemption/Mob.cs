@@ -8,8 +8,6 @@ namespace Redemption
 {
     public class Mob : Unit
     {
-        
-
         public Mob()
         {
             this.name = "Unknown Monster";
@@ -23,11 +21,11 @@ namespace Redemption
 
         }
 
+        // Creating mob with "typical" stats (based on mob's level)
         public void CreateGenericMob(int level, string name)
         {
-            
-            this.name = name;
             this.level = level;
+            this.name = name;
             this.baseArmor = (1 * level)/2;
             this.baseAtk = 1 * level;
             this.baseHp = 5 * level;
@@ -37,6 +35,7 @@ namespace Redemption
             this.gold = rand.Next(level, (3 * level)-1);
         }
 
+        // Creating custom mob, with all stats from parameters
         public void CreateCustomMob(int level, string name, int baseArmor, int baseAtk, int baseHp, int experience, int gold)
         {
             this.level = level;
@@ -49,12 +48,13 @@ namespace Redemption
             this.gold = gold;
         }
         
+        // Returns experience points dropped by mob
         public int DropExp()
         {
             return this.experience;
-
         }
 
+        // Returns gold points dropped by mob
         public int DropGold()
         {
             return this.gold;

@@ -17,6 +17,8 @@ namespace Redemption
         public int maxExperience { get; set; }
         public int maxMana { get; set; } 
         public int currentMana { get; set; }
+        
+        // Default character
         public Character()
         {
             this.name = "Gustav";
@@ -30,9 +32,16 @@ namespace Redemption
             this.maxMana = 10;
         }
 
+        /*
+        ==============================================================================
+            CHARACTER AND ITEMS
+        ==============================================================================
+        */
+
+
+        // Create player character (basically just give him a name, he still has default stats)
         public Character CreateCharacter()
         {
-
             Console.Write("Your name: ");
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             this.name = Console.ReadLine();
@@ -42,6 +51,7 @@ namespace Redemption
             return this;
         }
 
+        // Update character's stats
         public void UpdateStats()
         {
             this.currentAtk = baseAtk;
@@ -63,9 +73,9 @@ namespace Redemption
             this.currentHp = this.maxHp;
         }
 
+        // Show character stats
         public void ShowStats()
         {
-            
             string[] itemNames = new string[3];
             itemNames[0] = "No sword equipped!";
             itemNames[1] = "No shield equipped!";
@@ -77,8 +87,8 @@ namespace Redemption
                 {
                     itemNames[i] = this.items[i].name;
                 }
-
             }
+
             /*
             ====================
             Your stats
@@ -87,9 +97,7 @@ namespace Redemption
                 Experience: {character experience}
                 Experience needed to level up: {character (max experience - experience)}
                 Gold: {character gold}
-
             */ 
-             
             Console.ResetColor();
             Console.WriteLine("====================");
             Console.WriteLine("Your stats");
@@ -158,10 +166,9 @@ namespace Redemption
             Console.ResetColor();
             Console.WriteLine("====================");
             Console.WriteLine();
-
-
-
         }
+
+        // Returns string with item stats ("attack/armor/hp bonus: {item stat}")
         public string ItemStats(Item item, int type)
         {
             string result = "";
@@ -181,14 +188,14 @@ namespace Redemption
                     result += item.stat;
                     break;
             }
-            return result;
 
+            return result;
         }
 
-
-
+        // Character receives an Item
         public void ReceiveItem(Item item)
         {
+            // Get item type
             string itemType = item.ToString().Substring(11).ToLower();
             int type = 0;
             if (item.GetType() == typeof(Sword))
@@ -204,9 +211,8 @@ namespace Redemption
                 type = 2;
             }
 
-            string newItemStats = ItemStats(item, type);
-
             bool noItem = true;
+            string newItemStats = ItemStats(item, type);
             string statsToCompare = "which, apparently, you don't have";
             if (CheckForItems(type))
             {
@@ -261,22 +267,76 @@ namespace Redemption
         }
 
 
-
+        // Checks, if player has an item on current slot
         public bool CheckForItems(int id)
         {
             return this.items.ElementAtOrDefault(id) != null;
 
         }
 
+        // Responsible for buying items from shop
+        public void GoShopping(Shop shop)
+        {
+            Console.ResetColor();
+            Console.WriteLine("Welcome to the shop! Find yourself something useful.");
+            Console.WriteLine();
+            int i = 1;
+            // Lists items from current shop
+            i = shop.ShowShopItemsList(i);
+            Console.WriteLine("{0}. Leave", i);
+
+            // Your gold: {character gold}.
+            Console.WriteLine();
+            Console.Write("Your gold: ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("{0}", this.gold);
+            Console.ResetColor();
+            Console.WriteLine(".");
+            Console.WriteLine();
+            Console.Write("Your choice: ");
+
+            int answer = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine();
+            answer -= 1;
+            if (answer != shop.shopItemList.Count)
+            {
+                if (shop.shopItemList[answer].price <= this.gold)
+                {
+                    // Thanks for buying the {item name from shop's list}!
+                    Console.Write("Thanks for buying the ");
+                    Console.ForegroundColor = ConsoleColor.Blue;
+                    Console.Write("{0}", shop.shopItemList[answer].name);
+                    Console.ResetColor();
+                    Console.WriteLine("!");
+
+                    this.gold -= shop.shopItemList[answer].price;
+                    this.ReceiveItem(shop.shopItemList[answer]);
+                }
+                else
+                {
+                    Console.WriteLine("You don't even have enough money! Go away!");
+                }
+                Console.WriteLine();
+            }
+
+        }
+
+
+        /*
+        ==============================================================================
+            FIGHTING WITH ENEMIES
+        ==============================================================================
+        */
+
+        // Responsible for generating and spotting an enemy (with function CreateGenericMob)
         public void SpotEnemy(Mob mob, int locationLevel, List<string> genericMobNames)
         {
-            
             Random rand = new Random();
             int mobNameNumber = rand.Next(0, genericMobNames.Count - 1);
             mob.CreateGenericMob(locationLevel, genericMobNames[mobNameNumber]);
+
             //You spot a monster! It's {monster name} with level {level}.
             Console.ResetColor();
-
             Console.Write("You spot a monster! It's ");
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.Write("{0} ", mob.name);
@@ -286,8 +346,6 @@ namespace Redemption
             Console.Write("{0}", mob.level);
             Console.ResetColor();
             Console.WriteLine(".");
-
-
             Console.WriteLine("Do you want to fight?");
             Console.WriteLine("1. Yes");
             Console.WriteLine("2. No");
@@ -305,11 +363,97 @@ namespace Redemption
             }
         }
 
+        // Fighting with mob
+        public void Fight(Mob mob)
+        {
+            bool characterFlee = false;
+            // Get ready to fight! You face {mob name}, with level {mob level}.
+            Console.ResetColor();
+            Console.Write("Get ready to fight! You face ");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("{0}", mob.name);
+            Console.ResetColor();
+            Console.Write(", with level ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", mob.level);
+            Console.ResetColor();
+            Console.WriteLine(".");
+            Console.WriteLine();
+
+            //{mob name} has {mob current hp} hp and {mob base armor} armor
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("{0}", mob.name);
+            Console.ResetColor();
+            Console.Write(" has ");
+            Console.ForegroundColor = ConsoleColor.DarkRed;
+            Console.Write("{0}", mob.currentHp);
+            Console.ResetColor();
+            Console.Write(" hp and ");
+            Console.ForegroundColor = ConsoleColor.DarkMagenta;
+            Console.Write("{0}", mob.baseArmor);
+            Console.ResetColor();
+            Console.WriteLine(" armor.");
+
+            // Fighting cycle
+            while (this.currentHp > 0 && mob.currentHp > 0 && characterFlee == false)
+            {
+                Console.ResetColor();
+                Console.WriteLine();
+                Console.WriteLine("What action do you perform?");
+                Console.WriteLine("1. Attack");
+                Console.Write("2. Use spell (current mana: ");
+                Console.ForegroundColor = ConsoleColor.DarkBlue;
+                Console.Write("{0}", this.currentMana);
+                Console.ResetColor();
+                Console.WriteLine(")");
+                Console.WriteLine("3. Flee");
+                Console.WriteLine();
+                Console.Write("Your choice: ");
+                int action = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine();
+                switch (action)
+                {
+                    case 1:
+                        Attack(this, mob, this.currentAtk, mob.baseArmor);
+                        break;
+                    case 2:
+                        ChooseSpell();
+                        break;
+                    case 3:
+                        characterFlee = this.Flee(mob);
+                        break;
+                }
+
+                if (mob.currentHp > 0 && characterFlee == false) { Attack(mob, this, mob.baseAtk, this.currentArmor); }
+            }
+
+            // Result of fight
+            if (this.currentHp > 0 && characterFlee == false)
+            {
+                UpdateStats();
+                Console.ForegroundColor = ConsoleColor.Green;
+                Console.WriteLine(AnnounceWinner(this, mob));
+                Console.ResetColor();
+                this.GainExp(mob.DropExp());
+                this.GainGold(mob.DropGold());
+                Console.WriteLine();
+            }
+            else if (mob.currentHp > 0 && characterFlee == false)
+            {
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.WriteLine(AnnounceWinner(mob, this));
+                Console.ResetColor();
+            }
+
+        }
+
+        // Unit X attacks unit Y with basic attack
         public void Attack(Unit unitAttacking, Unit unitAttacked, int atk, int armor)
         {
             int damage = (atk - armor);
             unitAttacked.currentHp -= damage;
             if (unitAttacked.currentHp <= 0) { unitAttacked.currentHp = 0; }
+
             // {unit attacking} attacks for {damage}, {unit attacked} has {current hp of attacked unit} hp left.
             Console.ResetColor();
             if (unitAttacking.GetType() == typeof(Character)) { Console.ForegroundColor = ConsoleColor.DarkGreen; }
@@ -333,6 +477,7 @@ namespace Redemption
             Console.WriteLine();
         }
 
+        // Choose which spell to use as action in fight
         public void ChooseSpell()
         {
             int i = 1;
@@ -366,6 +511,105 @@ namespace Redemption
 
         }
 
+        // Character flees from a fight (also loses all experience points and some gold)
+        public bool Flee(Mob mob)
+        {
+            this.gold -= mob.gold;
+            this.experience = 0;
+            // {character name} runs away! All experience and {mob gold} gold lost!
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("{0}", this.name);
+            Console.ResetColor();
+            Console.Write(" runs away! ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("All");
+            Console.ResetColor();
+            Console.Write(" experience and ");
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            Console.Write("{0}", mob.gold);
+            Console.ResetColor();
+            Console.WriteLine(" gold lost!");
+            Console.WriteLine();
+
+
+            return true;
+        }
+
+        // Returns string telling who won the fight
+        public string AnnounceWinner(Unit unitWinner, Unit unitLoser)
+        {
+            string result = unitWinner.name + " was victorious! " + unitLoser.name + " has been slain.";
+
+
+            return result;
+        }
+
+        // Character gains gold from killed mob
+        public void GainGold(int goldGained)
+        {
+            this.gold += goldGained;
+            Console.ForegroundColor = ConsoleColor.DarkYellow;
+            //{gained gold} gold gained.
+            Console.Write("{0}", goldGained);
+            Console.ResetColor();
+            Console.WriteLine(" gold gained.");
+
+        }
+
+        // Character gains experience points from killed mob
+        public void GainExp(int expGained)
+        {
+            // "{character name} has gained {gained experience} experience from this fight.
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("{0}", this.name);
+            Console.ResetColor();
+            Console.Write(" has gained ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", expGained);
+            Console.ResetColor();
+            Console.WriteLine(" experience from this fight.");
+
+            this.experience += expGained;
+            if (this.experience >= maxExperience)
+            {
+                this.experience = 0;
+                this.LevelUp();
+            }
+        }
+
+        // Character gains higher level and increases his stats
+        public void LevelUp()
+        {
+            this.level += 1;
+            if (level % 2 == 0) { this.baseArmor += 1; }
+            this.baseAtk += 1;
+            this.baseHp += 5;
+            this.experience = 0;
+            this.maxExperience += 5;
+            this.maxMana += 5;
+            this.UpdateStats();
+
+            //{character name} has gained level {gained level}!
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("{0}", this.name);
+            Console.ResetColor();
+            Console.Write(" has gained level ");
+            Console.ForegroundColor = ConsoleColor.Yellow;
+            Console.Write("{0}", this.level);
+            Console.ResetColor();
+            Console.WriteLine("!");
+            Console.WriteLine();
+        }
+
+
+
+        /*
+        ==============================================================================
+            SPELLS
+        ==============================================================================
+        */
+
+        // Spell
         public void TideThrust(Mob target)
         {
             int manaCost = 5;
@@ -417,6 +661,7 @@ namespace Redemption
 
         }
 
+        // Spell
         public void Rathonhnhaketon()
         {
             int manaCost = 10;
@@ -457,227 +702,14 @@ namespace Redemption
             }
         }
 
-        public string AnnounceWinner(Unit unitWinner, Unit unitLoser)
-        {
-            string result = unitWinner.name + " was victorious! " + unitLoser.name + " has been slain.";
+        
+
+        
+
+        
 
 
-            return result;
-        }
-
-        public void GainGold(int goldGained)
-        {
-            this.gold += goldGained;
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            //{gained gold} gold gained.
-            Console.Write("{0}", goldGained);
-            Console.ResetColor();
-            Console.WriteLine(" gold gained.");
-
-        }
-
-        public void GainExp(int expGained)
-        {
-            // "{character name} has gained {gained experience} experience from this fight.
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("{0}", this.name);
-            Console.ResetColor();
-            Console.Write(" has gained ");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("{0}", expGained);
-            Console.ResetColor();
-            Console.WriteLine(" experience from this fight.");
-
-            this.experience += expGained;
-            if (this.experience >= maxExperience)
-            {
-                this.experience = 0;
-                this.LevelUp();
-            }
-        }
-
-        public void LevelUp()
-        {
-            this.level += 1;
-            if (level % 2 == 0) { this.baseArmor += 1; }
-            this.baseAtk += 1;
-            this.baseHp += 5;
-            this.experience = 0;
-            this.maxExperience += 5;
-            this.maxMana += 5;
-            this.UpdateStats();
-
-            //{character name} has gained level {gained level}!
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("{0}", this.name);
-            Console.ResetColor();
-            Console.Write(" has gained level ");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("{0}", this.level);
-            Console.ResetColor();
-            Console.WriteLine("!");
-            Console.WriteLine();
-        }
-
-        public bool Flee(Mob mob)
-        {
-            this.gold -= mob.gold;
-            this.experience = 0;
-            // {character name} runs away! All experience and {mob gold} gold lost!
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("{0}", this.name);
-            Console.ResetColor();
-            Console.Write(" runs away! ");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("All");
-            Console.ResetColor();
-            Console.Write(" experience and ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("{0}", mob.gold);
-            Console.ResetColor();
-            Console.WriteLine(" gold lost!");
-            Console.WriteLine();
-
-
-            return true;
-        }
-
-        public void Fight(Mob mob)
-        {
-            bool characterFlee = false;
-            // Get ready to fight! You face {mob name}, with level {mob level}.
-            Console.ResetColor();
-            Console.Write("Get ready to fight! You face ");
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write("{0}", mob.name);
-            Console.ResetColor();
-            Console.Write(", with level ");
-            Console.ForegroundColor = ConsoleColor.Yellow;
-            Console.Write("{0}", mob.level);
-            Console.ResetColor();
-            Console.WriteLine(".");
-            Console.WriteLine();
-
-            //{mob name} has {mob current hp} hp and {mob base armor} armor
-            Console.ForegroundColor = ConsoleColor.DarkGray;
-            Console.Write("{0}", mob.name);
-            Console.ResetColor();
-            Console.Write(" has ");
-            Console.ForegroundColor = ConsoleColor.DarkRed;
-            Console.Write("{0}", mob.currentHp);
-            Console.ResetColor();
-            Console.Write(" hp and ");
-            Console.ForegroundColor = ConsoleColor.DarkMagenta;
-            Console.Write("{0}", mob.baseArmor);
-            Console.ResetColor();
-            Console.WriteLine(" armor.");
-            
-
-
-            while (this.currentHp > 0 && mob.currentHp > 0 && characterFlee == false)
-            {
-                Console.ResetColor();
-                Console.WriteLine();
-                Console.WriteLine("What action do you perform?");
-                Console.WriteLine("1. Attack");
-                Console.Write("2. Use spell (current mana: ");
-                Console.ForegroundColor = ConsoleColor.DarkBlue;
-                Console.Write("{0}", this.currentMana);
-                Console.ResetColor();
-                Console.WriteLine(")");
-                Console.WriteLine("3. Flee");
-                Console.WriteLine();
-                Console.Write("Your choice: ");
-                int action = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine();
-                switch (action)
-                {
-                    case 1:
-                        Attack(this, mob, this.currentAtk, mob.baseArmor);
-                        break;
-                    case 2:
-                        ChooseSpell();
-                        break;
-                    case 3:
-                        characterFlee = this.Flee(mob);
-                        break;
-                }
-
-                
-
-                if (mob.currentHp > 0 && characterFlee == false) { Attack(mob, this, mob.baseAtk, this.currentArmor); }
-            }
-            if (this.currentHp > 0 && characterFlee == false)
-            {
-                UpdateStats();
-                Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine(AnnounceWinner(this, mob));
-                Console.ResetColor();
-                this.GainExp(mob.DropExp());
-                this.GainGold(mob.DropGold());
-                Console.WriteLine();
-            }
-            else if (mob.currentHp > 0 && characterFlee == false)
-            {
-                Console.ForegroundColor = ConsoleColor.Red;
-                Console.WriteLine(AnnounceWinner(mob, this));
-                Console.ResetColor();
-            }
-            
-            
-
-
-
-        }
-
-
-        public void GoShopping(Shop shop)
-        {
-            Console.ResetColor();
-            Console.WriteLine("Welcome to the shop! Find yourself something useful.");
-            Console.WriteLine();
-            int i = 1;
-            i = shop.ShowShopItemsList(i);
-           
-            Console.WriteLine("{0}. Leave.", i);
-
-            // Your gold: {character gold}.
-            Console.WriteLine();
-            Console.Write("Your gold: ");
-            Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("{0}", this.gold);
-            Console.ResetColor();
-            Console.WriteLine(".");
-            Console.WriteLine();
-            Console.Write("Your choice: ");
-            
-            int answer = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine();
-            answer -= 1;
-            if (answer != shop.shopItemList.Count)
-            {
-                if (shop.shopItemList[answer].price <= this.gold)
-                {
-                    
-                    // Thanks for buying the {item name from shop's list}!
-                    Console.Write("Thanks for buying the ");
-                    Console.ForegroundColor = ConsoleColor.Blue;
-                    Console.Write("{0}", shop.shopItemList[answer].name);
-                    Console.ResetColor();
-                    Console.WriteLine("!");
-
-                    this.gold -= shop.shopItemList[answer].price;
-                    this.ReceiveItem(shop.shopItemList[answer]);
-                }
-                else
-                {
-                    Console.WriteLine("You don't even have enough money! Go away!");
-
-                }
-                Console.WriteLine();
-            }
-           
-        }
+        
 
         
 

@@ -8,7 +8,6 @@ namespace Redemption
 {
     public class Location
     {
-
         public List<string> locationStrings = new List<string>();
         public List<Action> locationActions = new List<Action>();
         public List<string> genericMobNames;
@@ -17,8 +16,7 @@ namespace Redemption
         public bool civilized { get; set; }
         public int locationLevel { get; set; }
 
-
-
+        // Starting location
         public Location()
         {
             this.name = "Town";
@@ -26,13 +24,44 @@ namespace Redemption
             this.places = new string[1];
             places[0] = "Forest";
             this.genericMobNames = new List<string>();
-
-
         }
 
+        // Current location (and "what to do")
+        public void Idle(Character character, Mob mob, Shop shop)
+        {
+            // You are in {place name}. What now?
+            Console.ResetColor();
+            Console.Write("You are in ");
+            Console.ForegroundColor = ConsoleColor.DarkGreen;
+            Console.Write("{0}", this.name);
+            Console.ResetColor();
+            Console.WriteLine(". What now?");
+            if (this.civilized != true) { Console.WriteLine("1. Search for a monster"); }
+            else { Console.WriteLine("1. Go to shop"); }
+            Console.WriteLine("2. Go to another place");
+            Console.WriteLine("3. Show your stats");
+            Console.WriteLine();
+            Console.Write("Your choice: ");
+            int answer = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine();
+            switch (answer)
+            {
+                case 1:
+                    if (this.civilized != true) { character.SpotEnemy(mob, this.locationLevel, this.genericMobNames); }
+                    else if (this.civilized == true) { character.GoShopping(shop); }
+                    break;
+                case 2:
+                    this.ChooseLocation();
+                    break;
+                case 3:
+                    character.ShowStats();
+                    break;
+            }
+        }
+
+        // Choose place to go
         public void ChooseLocation()
         {
-            Location location = this;
             int i = 1;
             Console.WriteLine("So, where do you want to go?");
             foreach(string place in this.places)
@@ -50,11 +79,12 @@ namespace Redemption
             Console.Write("Your choice: ");
             int answer = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine();
-            GenerateLocation(places[answer-1], location);
 
+            GenerateLocation(places[answer-1]);
         }
 
-        public void GenerateLocation(string locationName, Location location)
+        // Travelling to another location
+        public void GenerateLocation(string locationName)
         {
             // You travel to {location name}.
             Console.ResetColor();
@@ -69,6 +99,7 @@ namespace Redemption
 
         }
 
+        // Go to the Town (called by GenerateLocation)
         public void GoToTown(Location location)
         {
             location.name = "Town";
@@ -76,10 +107,9 @@ namespace Redemption
             location.places = new string[1];
             location.places[0] = "Forest";
             location.locationLevel = 1;
-            
-            
         }
-        
+
+        // Go to the Forest (called by GenerateLocation)
         public void GoToForest(Location location)
         {
             location.name = "Forest";
@@ -92,9 +122,9 @@ namespace Redemption
             this.genericMobNames.Add("Goblin Gatherer");
             this.genericMobNames.Add("Feral Wolf");
             this.genericMobNames.Add("Goblin Soldier");
-
         }
 
+        // Go to the Cave (called by GenerateLocation)
         public void GoToCave(Location location)
         {
             location.name = "Cave";
@@ -105,45 +135,9 @@ namespace Redemption
             this.genericMobNames.Clear();
             this.genericMobNames.Add("Goblin Guardian");
             this.genericMobNames.Add("Goblin Warrior");
-
-
         }
 
-        public void Idle(Character character, Mob mob,Shop shop)
-        {
-            // You are in {place name}. What now?
-            Console.ResetColor();
-            Console.Write("You are in ");
-            Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("{0}", this.name);
-            Console.ResetColor();
-            Console.WriteLine(". What now?");
-
-
-            if (this.civilized != true) { Console.WriteLine("1. Search for a monster"); }
-            else { Console.WriteLine("1. Go to shop"); }
-            Console.WriteLine("2. Go to another place");
-            Console.WriteLine("3. Show your stats");
-            Console.WriteLine();
-            Console.Write("Your choice: ");
-            int answer = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine();    
-            switch (answer)
-            {
-                case 1:
-                    if(this.civilized != true) { character.SpotEnemy(mob, this.locationLevel, this.genericMobNames); }
-                    else if(this.civilized==true) { character.GoShopping(shop); }
-                    break;
-                case 2:
-                    this.ChooseLocation();
-                    break;
-                case 3:
-                    character.ShowStats();
-                    break;
-            }
-
-
-        }
+        
 
 
     }

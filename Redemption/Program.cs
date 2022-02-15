@@ -35,11 +35,11 @@ namespace Redemption
             
             Character playerCharacter = new Character();
             playerCharacter.CreateCharacter();
-
             Location location = new Location();
             Shop shop = new Shop();
             Mob target = new Mob();
 
+            // Creating few items and adding them to created shop
             Item basicSword = new Sword("Basic Sword", 2, 3);
             Item greatSword = new Sword("Greatsword", 3, 6);
             Item claymore = new Sword("Claymore", 5, 12);
@@ -62,20 +62,19 @@ namespace Redemption
             shop.AddToShop(scaleBreastplate);
             shop.AddToShop(chainmail);
 
+            // Giving player basic spells
             playerCharacter.spells.Add(() => playerCharacter.TideThrust(target));
             playerCharacter.spells.Add(playerCharacter.Rathonhnhaketon);
             playerCharacter.spellsString.Add("Tide Thrust [+1 damage, 5 mana] (move your blade like wave, to make lunge stronger than usual attack).");
             playerCharacter.spellsString.Add("Rathonhnhake-ton [40% heal, 10 mana] (perform a quick ritual, that will restore your health).");
 
+            // Creating locations
             location.locationStrings.Add("Town");
             location.locationActions.Add(() => location.GoToTown(location));
             location.locationStrings.Add("Forest");
             location.locationActions.Add(() => location.GoToForest(location));
             location.locationStrings.Add("Cave");
             location.locationActions.Add(() => location.GoToCave(location));
-
-
-            playerCharacter.ReceiveItem(basicSword);
 
             while (true)
             {
