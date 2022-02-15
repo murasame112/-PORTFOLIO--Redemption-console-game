@@ -12,7 +12,7 @@ namespace Redemption
 
         public Mob()
         {
-            this.name = "Unknown monster";
+            this.name = "Unknown Monster";
             this.level = 1;
             this.baseArmor = 1;
             this.baseAtk = 1;

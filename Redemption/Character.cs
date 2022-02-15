@@ -36,6 +36,7 @@ namespace Redemption
             Console.Write("Your name: ");
             Console.ForegroundColor = ConsoleColor.DarkGreen;
             this.name = Console.ReadLine();
+            Console.WriteLine();
             this.UpdateStats();
             Console.ResetColor();
             return this;
@@ -79,15 +80,18 @@ namespace Redemption
 
             }
             /*
+            ====================
             Your stats
                 Name: {character name}
                 Level: {character level}
                 Experience: {character experience}
                 Experience needed to level up: {character (max experience - experience)}
                 Gold: {character gold}
+
             */ 
              
             Console.ResetColor();
+            Console.WriteLine("====================");
             Console.WriteLine("Your stats");
             Console.WriteLine();
             Console.Write("  Name: ");
@@ -115,6 +119,7 @@ namespace Redemption
                 Mana: {character max mana}
             */
             Console.ResetColor();
+            Console.WriteLine();
             Console.WriteLine("Current stats (with items equipped)");
             Console.Write("  Mana: ");
             Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -142,6 +147,7 @@ namespace Redemption
             Console.ResetColor();
 
             // Attack ({item name}): {current attack}
+            //====================
             Console.Write("  Attack (");
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write("{0}", itemNames[0]);
@@ -150,6 +156,8 @@ namespace Redemption
             Console.ForegroundColor = ConsoleColor.DarkCyan;
             Console.WriteLine("{0}", this.currentAtk);
             Console.ResetColor();
+            Console.WriteLine("====================");
+            Console.WriteLine();
 
 
 
@@ -206,9 +214,8 @@ namespace Redemption
                 statsToCompare = ItemStats(this.items[type], type);
             }
 
-            // You've received an item! It's a {item type}, which is called {item name} ({item stat})
+            // You've received an item! It's a {item type}, which is called {item name} ({item stat}).
             Console.ResetColor();
-            Console.WriteLine();
             Console.Write("You've received an item! It's a {0}, which is called ", itemType);
             Console.ForegroundColor = ConsoleColor.Blue;
             Console.Write("{0}", item.name);
@@ -219,7 +226,8 @@ namespace Redemption
             else if(type == 2) { Console.ForegroundColor = ConsoleColor.DarkRed; }
             Console.Write("{0}", newItemStats);
             Console.ResetColor();
-            Console.WriteLine(")");
+            Console.WriteLine(").");
+
 
 
             // Do you want to replace your {item type} ({item stat})? 
@@ -235,7 +243,10 @@ namespace Redemption
             Console.WriteLine(")?");
             Console.WriteLine("1. Yes");
             Console.WriteLine("2. No");
+            Console.WriteLine();
+            Console.Write("Your choice: ");
             int answer = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine();
             switch (answer)
             {
                 case 1:
@@ -278,10 +289,12 @@ namespace Redemption
 
 
             Console.WriteLine("Do you want to fight?");
-            Console.WriteLine("1. Yes.");
-            Console.WriteLine("2. No.");
-            Console.Write("Your answer: ");
+            Console.WriteLine("1. Yes");
+            Console.WriteLine("2. No");
+            Console.WriteLine();
+            Console.Write("Your choice: ");
             int answer = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine();
             switch (answer)
             {
                 case 1:
@@ -317,14 +330,13 @@ namespace Redemption
             Console.Write("{0}", unitAttacked.currentHp);
             Console.ResetColor();
             Console.WriteLine(" hp left.");
-
+            Console.WriteLine();
         }
 
         public void ChooseSpell()
         {
             int i = 1;
             Console.ResetColor();
-            Console.WriteLine();
             // Current mana: {character mana}
             Console.Write("Current mana: ");
             Console.ForegroundColor = ConsoleColor.DarkBlue;
@@ -343,7 +355,7 @@ namespace Redemption
                 Console.ResetColor();
                 i++;
             }
-
+            Console.WriteLine();
             Console.Write("Choose spell: ");
             int spellNumber = Convert.ToInt32(Console.ReadLine());
             Console.WriteLine();                
@@ -385,6 +397,7 @@ namespace Redemption
                 Console.Write("{0}", target.currentHp);
                 Console.ResetColor();
                 Console.WriteLine(" hp left.");
+                Console.WriteLine();
 
             }
             else
@@ -398,6 +411,7 @@ namespace Redemption
                 Console.Write("{0}", this.name);
                 Console.ResetColor();
                 Console.WriteLine(" has not enough mana... What a waste of time.");
+                Console.WriteLine();
             }
 
 
@@ -410,7 +424,7 @@ namespace Redemption
             if (this.currentMana >= manaCost)
             {
                 this.currentMana -= manaCost;
-                int hpHealed = this.maxHp / 5;
+                int hpHealed = ((this.maxHp / 5)*2);
                 if (this.maxHp < this.currentHp + hpHealed) { hpHealed = this.maxHp - this.currentHp; }
 
                 this.currentHp += hpHealed;
@@ -425,6 +439,7 @@ namespace Redemption
                 Console.Write("{0}", hpHealed);
                 Console.ResetColor();
                 Console.WriteLine(" hp.");
+                Console.WriteLine();
             }
             else
             {
@@ -438,6 +453,7 @@ namespace Redemption
                 Console.Write("{0}", this.name);
                 Console.ResetColor();
                 Console.WriteLine(" has not enough mana... What a waste of time.");
+                Console.WriteLine();
             }
         }
 
@@ -500,6 +516,7 @@ namespace Redemption
             Console.Write("{0}", this.level);
             Console.ResetColor();
             Console.WriteLine("!");
+            Console.WriteLine();
         }
 
         public bool Flee(Mob mob)
@@ -519,8 +536,9 @@ namespace Redemption
             Console.Write("{0}", mob.gold);
             Console.ResetColor();
             Console.WriteLine(" gold lost!");
+            Console.WriteLine();
 
-            
+
             return true;
         }
 
@@ -568,8 +586,10 @@ namespace Redemption
                 Console.ResetColor();
                 Console.WriteLine(")");
                 Console.WriteLine("3. Flee");
-                Console.Write("Your action: ");
+                Console.WriteLine();
+                Console.Write("Your choice: ");
                 int action = Convert.ToInt32(Console.ReadLine());
+                Console.WriteLine();
                 switch (action)
                 {
                     case 1:
@@ -583,7 +603,7 @@ namespace Redemption
                         break;
                 }
 
-                Console.WriteLine();
+                
 
                 if (mob.currentHp > 0 && characterFlee == false) { Attack(mob, this, mob.baseAtk, this.currentArmor); }
             }
@@ -595,8 +615,9 @@ namespace Redemption
                 Console.ResetColor();
                 this.GainExp(mob.DropExp());
                 this.GainGold(mob.DropGold());
-                
-            }else if (mob.currentHp > 0 && characterFlee == false)
+                Console.WriteLine();
+            }
+            else if (mob.currentHp > 0 && characterFlee == false)
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(AnnounceWinner(mob, this));
@@ -612,9 +633,9 @@ namespace Redemption
 
         public void GoShopping(Shop shop)
         {
-            Console.WriteLine();
             Console.ResetColor();
             Console.WriteLine("Welcome to the shop! Find yourself something useful.");
+            Console.WriteLine();
             int i = 1;
             i = shop.ShowShopItemsList(i);
            
@@ -627,27 +648,33 @@ namespace Redemption
             Console.Write("{0}", this.gold);
             Console.ResetColor();
             Console.WriteLine(".");
-            Console.Write("Your answer: ");
+            Console.WriteLine();
+            Console.Write("Your choice: ");
             
             int answer = Convert.ToInt32(Console.ReadLine());
+            Console.WriteLine();
             answer -= 1;
             if (answer != shop.shopItemList.Count)
             {
                 if (shop.shopItemList[answer].price <= this.gold)
                 {
-                    this.gold -= shop.shopItemList[answer].price;
-                    this.ReceiveItem(shop.shopItemList[answer]);
+                    
                     // Thanks for buying the {item name from shop's list}!
                     Console.Write("Thanks for buying the ");
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("{0}", shop.shopItemList[answer].name);
                     Console.ResetColor();
                     Console.WriteLine("!");
+
+                    this.gold -= shop.shopItemList[answer].price;
+                    this.ReceiveItem(shop.shopItemList[answer]);
                 }
                 else
                 {
                     Console.WriteLine("You don't even have enough money! Go away!");
+
                 }
+                Console.WriteLine();
             }
            
         }

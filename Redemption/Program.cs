@@ -15,12 +15,10 @@ namespace Redemption
         - przeciwnicy nie mają itemów, ale mają mocniejsze staty (moga byc defaultowo liczone ze wzoru zaleznie od levela)
 
     todo:
-        - boss w jaskini? po np zabiciu 5 mobów? (QUESTY)
+        - boss w jaskini? po np zabiciu 5 mobów? (QUESTY) (NAGRODA JAKIŚ ITEM, SPORO GOLDA ORAZ MOŻE Z TYM DARK PALADINEM?)
         
-        - kolory w character
 
-        - dopilnowac, by tam gdzie gracz cos wprowadza nie bylo bledow (ze np zamiast 1 lub 2 poda liczbe 33 lub napisze "żuraw")
-        - OGÓLNE REDAGOWANIE TEKSTÓW (KROPKI, KOLORY LITER, ODPOWIEDNIE WCIĘCIA ITP.)
+        - dopilnowac, by tam gdzie gracz cos wprowadza nie bylo bledow (ze np zamiast 1 lub 2 poda liczbe 33 lub napisze "żuraw") (kazdy readline w pętli dowhile?)
         - SPRZĄTANIE KODU (FUNKCJE W ODPOWIEDNIEJ KOLEJNOŚCI, ESTETYKA, REFAKTORYZACJA)
         
     fabuła:
@@ -77,7 +75,7 @@ namespace Redemption
             location.locationActions.Add(() => location.GoToCave(location));
 
 
-            //playerCharacter.ReceiveItem(basicSword);
+            playerCharacter.ReceiveItem(basicSword);
 
             while (true)
             {

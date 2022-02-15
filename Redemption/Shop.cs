@@ -37,7 +37,7 @@ namespace Redemption
 
                 if (item.GetType() == typeof(Sword))
                 {
-                    // {item number}. {item name}, attack value: {stat}, {gold} gold
+                    // {item number}. {item name}, attack value: {stat}, {gold} gold.
                     Console.Write("{0}. ", i);
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("{0}", item.name);
@@ -50,7 +50,7 @@ namespace Redemption
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.Write("{0} ", item.price);
                     Console.ResetColor();
-                    Console.WriteLine("gold");
+                    Console.WriteLine("gold.");
                     Console.ResetColor();
                     i++;
                 }
@@ -65,7 +65,7 @@ namespace Redemption
 
                 if (item.GetType() == typeof(Shield))
                 {
-                    // {item number}. {item name}, armor value: {stat}, {gold} gold
+                    // {item number}. {item name}, armor value: {stat}, {gold} gold.
                     Console.Write("{0}. ", i);
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("{0}", item.name);
@@ -78,7 +78,7 @@ namespace Redemption
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.Write("{0} ", item.price);
                     Console.ResetColor();
-                    Console.WriteLine("gold");
+                    Console.WriteLine("gold.");
                     Console.ResetColor();
                     i++;
                 }
@@ -93,7 +93,7 @@ namespace Redemption
 
                 if (item.GetType() == typeof(Breastplate))
                 {
-                    // {item number}. {item name}, hp value: {stat}, {gold} gold
+                    // {item number}. {item name}, hp value: {stat}, {gold} gold.
                     Console.Write("{0}. ", i);
                     Console.ForegroundColor = ConsoleColor.Blue;
                     Console.Write("{0}", item.name);
@@ -106,7 +106,7 @@ namespace Redemption
                     Console.ForegroundColor = ConsoleColor.DarkYellow;
                     Console.Write("{0} ", item.price);
                     Console.ResetColor();
-                    Console.WriteLine("gold");
+                    Console.WriteLine("gold.");
                     Console.ResetColor();
                     i++;
                 }
