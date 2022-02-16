@@ -9,18 +9,11 @@ namespace Redemption
     Console.ForegroundColor = ConsoleColor.Green; 
     Console.ResetColor();
 
-    mechanika:
-        - postać leczy się po każdej walce do full hp
-        - każdy item odpowiada za zwiększanie jednej ze statystyk
-        - przeciwnicy nie mają itemów, ale mają mocniejsze staty (moga byc defaultowo liczone ze wzoru zaleznie od levela)
+
 
     todo:
-        - boss w jaskini? po np zabiciu 5 mobów? (QUESTY) (NAGRODA JAKIŚ ITEM, SPORO GOLDA ORAZ MOŻE Z TYM DARK PALADINEM?)
-        
-
-        - dopilnowac, by tam gdzie gracz cos wprowadza nie bylo bledow (ze np zamiast 1 lub 2 poda liczbe 33 lub napisze "żuraw") (kazdy readline w pętli dowhile?)
-        - SPRZĄTANIE KODU (FUNKCJE W ODPOWIEDNIEJ KOLEJNOŚCI, ESTETYKA, REFAKTORYZACJA)
-        
+        - kara za smierc
+        - zmienic smierc na utrate przytomnoisci czy cos
     fabuła:
         - na poczatku cytat nedlima, "asdf asdf" ~ Nedlim the Lightbringer (uzyc innego slowa)
         - po zabiciu jakeigoś bossa mozemy zmienic sie w Dark Paladina - zabijajc bossa wyzwalamy jakas moc czy cos ktora mowi, ze zastapi nam swiatlosc
@@ -38,6 +31,7 @@ namespace Redemption
             Location location = new Location();
             Shop shop = new Shop();
             Mob target = new Mob();
+            Quest quest = new Quest();
 
             // Creating few items and adding them to created shop
             Item basicSword = new Sword("Basic Sword", 2, 3);
@@ -71,15 +65,20 @@ namespace Redemption
             // Creating locations
             location.locationStrings.Add("Town");
             location.locationActions.Add(() => location.GoToTown(location));
-            location.locationStrings.Add("Forest");
+            location.locationStrings.Add("Forest [level 1]");
             location.locationActions.Add(() => location.GoToForest(location));
-            location.locationStrings.Add("Cave");
+            location.locationStrings.Add("Cave [level 3]");
             location.locationActions.Add(() => location.GoToCave(location));
+            location.locationStrings.Add("Old Ruins [level 5]");
+            location.locationActions.Add(() => location.GoToOldRuins(location));
+
+            // Creating quests
+            quest.SetKill5CaveMonsters();
 
             while (true)
             {
-                // if( warunek questa) // dzieje sie spotkanie bossa
-                location.Idle(playerCharacter, target, shop);
+                
+                location.Idle(playerCharacter, target, shop, quest);
 
             }
             

@@ -22,12 +22,12 @@ namespace Redemption
             this.name = "Town";
             this.civilized = true;
             this.places = new string[1];
-            places[0] = "Forest";
+            places[0] = "Forest [level 1]";
             this.genericMobNames = new List<string>();
         }
 
         // Current location (and "what to do")
-        public void Idle(Character character, Mob mob, Shop shop)
+        public void Idle(Character character, Mob mob, Shop shop, Quest quest)
         {
             // You are in {place name}. What now?
             Console.ResetColor();
@@ -41,13 +41,26 @@ namespace Redemption
             Console.WriteLine("2. Go to another place");
             Console.WriteLine("3. Show your stats");
             Console.WriteLine();
-            Console.Write("Your choice: ");
-            int answer = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine();
+            int answer = 1;
+            do
+            {   
+                Console.Write("Your choice: ");
+                if(answer != 1 && answer != 2 && answer != 3) { Console.Write("(choose correct number) "); }
+                try
+                {
+                    answer = Convert.ToInt32(Console.ReadLine());
+                }catch (FormatException)
+                {
+                    answer = 0;
+                }
+                
+
+            } while (answer != 1 && answer != 2 && answer != 3);
+            Console.WriteLine();         
             switch (answer)
             {
                 case 1:
-                    if (this.civilized != true) { character.SpotEnemy(mob, this.locationLevel, this.genericMobNames); }
+                    if (this.civilized != true) { character.SpotEnemy(mob, this, quest); }
                     else if (this.civilized == true) { character.GoShopping(shop); }
                     break;
                 case 2:
@@ -76,27 +89,39 @@ namespace Redemption
                 i++;
             }
             Console.WriteLine();
-            Console.Write("Your choice: ");
-            int answer = Convert.ToInt32(Console.ReadLine());
-            Console.WriteLine();
 
-            GenerateLocation(places[answer-1]);
+            int answer = 1;
+            do
+            {
+                Console.Write("Your choice: ");
+                if (answer < 1 || answer > i) { Console.Write("(choose correct number) "); }
+                try
+                {
+                    answer = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    answer = 0;
+                }
+            } while (answer < 1 || answer > i);
+
+            this.GenerateLocation(places[answer-1]);
         }
 
         // Travelling to another location
         public void GenerateLocation(string locationName)
         {
+            int index = locationStrings.FindIndex(locationStrings => locationStrings.Contains(locationName));
+            locationActions[index]();
+
             // You travel to {location name}.
             Console.ResetColor();
             Console.Write("You travel to ");
             Console.ForegroundColor = ConsoleColor.DarkGreen;
-            Console.Write("{0}", locationName);
+            Console.Write("{0}", this.name);
             Console.ResetColor();
             Console.WriteLine(".");
             Console.WriteLine();
-            int index = locationStrings.FindIndex(locationStrings => locationStrings.Contains(locationName));
-            locationActions[index]();
-
         }
 
         // Go to the Town (called by GenerateLocation)
@@ -105,7 +130,7 @@ namespace Redemption
             location.name = "Town";
             location.civilized = true;
             location.places = new string[1];
-            location.places[0] = "Forest";
+            location.places[0] = "Forest [level 1]";
             location.locationLevel = 1;
         }
 
@@ -114,9 +139,11 @@ namespace Redemption
         {
             location.name = "Forest";
             location.civilized = false;
-            location.places = new string[2];
+            location.places = new string[3];
             location.places[0] = "Town";
-            location.places[1] = "Cave";
+            location.places[1] = "Cave [level 3]";
+            location.places[2] = "Old Ruins [level 5]";
+            // ^ levele?
             location.locationLevel = 1;
             this.genericMobNames.Clear();
             this.genericMobNames.Add("Goblin Gatherer");
@@ -130,14 +157,28 @@ namespace Redemption
             location.name = "Cave";
             location.civilized = false;
             location.places = new string[1];
-            location.places[0] = "Forest";
+            location.places[0] = "Forest [level 1]";
             location.locationLevel = 3;
             this.genericMobNames.Clear();
             this.genericMobNames.Add("Goblin Guardian");
             this.genericMobNames.Add("Goblin Warrior");
         }
 
-        
+        // Go to the Old Ruins (called by GenerateLocation)
+        public void GoToOldRuins(Location location)
+        {
+            location.name = "Old Ruins";
+            location.civilized = false;
+            location.places = new string[1];
+            location.places[0] = "Forest [level 1]";
+            location.locationLevel = 3;
+            this.genericMobNames.Clear();
+            this.genericMobNames.Add("Ghost of the Scribe");
+            this.genericMobNames.Add("Ghost of the Servant");
+            this.genericMobNames.Add("Ghost of the Squire");
+        }
+
+
 
 
     }

@@ -17,7 +17,9 @@ namespace Redemption
         public int maxExperience { get; set; }
         public int maxMana { get; set; } 
         public int currentMana { get; set; }
-        
+
+        public int mobsKilledInCave { get; set; }
+
         // Default character
         public Character()
         {
@@ -29,7 +31,8 @@ namespace Redemption
             this.experience = 0;
             this.maxExperience = 5;
             this.gold = 0;
-            this.maxMana = 10;
+            this.maxMana = 5;
+
         }
 
         /*
@@ -250,8 +253,20 @@ namespace Redemption
             Console.WriteLine("1. Yes");
             Console.WriteLine("2. No");
             Console.WriteLine();
-            Console.Write("Your choice: ");
-            int answer = Convert.ToInt32(Console.ReadLine());
+            int answer = 1;
+            do
+            {
+                Console.Write("Your choice: ");
+                if (answer != 1 && answer != 2) { Console.Write("(choose correct number) "); }
+                try
+                {
+                    answer = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    answer = 0;
+                }
+            } while (answer != 1 && answer != 2);
             Console.WriteLine();
             switch (answer)
             {
@@ -293,9 +308,20 @@ namespace Redemption
             Console.ResetColor();
             Console.WriteLine(".");
             Console.WriteLine();
-            Console.Write("Your choice: ");
-
-            int answer = Convert.ToInt32(Console.ReadLine());
+            int answer = 1;
+            do
+            {
+                Console.Write("Your choice: ");
+                if (answer < 1 || answer > i) { Console.Write("(choose correct number) "); }
+                try
+                {
+                    answer = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    answer = 0;
+                }
+            } while (answer < 1 || answer > i);
             Console.WriteLine();
             answer -= 1;
             if (answer != shop.shopItemList.Count)
@@ -329,11 +355,20 @@ namespace Redemption
         */
 
         // Responsible for generating and spotting an enemy (with function CreateGenericMob)
-        public void SpotEnemy(Mob mob, int locationLevel, List<string> genericMobNames)
+        public void SpotEnemy(Mob mob, Location location, Quest quest)
         {
-            Random rand = new Random();
-            int mobNameNumber = rand.Next(0, genericMobNames.Count - 1);
-            mob.CreateGenericMob(locationLevel, genericMobNames[mobNameNumber]);
+
+            if (location.name == "Cave" && quest.counter >= quest.counterMax && quest.finished != true)
+            {
+                mob.CreateCustomMob(4, "Senillneso", 3, 6, 25, 0, 0, 1);
+
+            }
+            else
+            {
+                Random rand = new Random();
+                int mobNameNumber = rand.Next(0, location.genericMobNames.Count - 1);
+                mob.CreateGenericMob(location.locationLevel, location.genericMobNames[mobNameNumber]);
+            }
 
             //You spot a monster! It's {monster name} with level {level}.
             Console.ResetColor();
@@ -350,13 +385,26 @@ namespace Redemption
             Console.WriteLine("1. Yes");
             Console.WriteLine("2. No");
             Console.WriteLine();
-            Console.Write("Your choice: ");
-            int answer = Convert.ToInt32(Console.ReadLine());
+            int answer = 1;
+            do
+            {
+                Console.Write("Your choice: ");
+                if (answer != 1 && answer != 2) { Console.Write("(choose correct number) "); }
+                try
+                {
+                    answer = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    answer = 0;
+                }
+            } while (answer != 1 && answer != 2);
             Console.WriteLine();
             switch (answer)
             {
                 case 1:
-                    this.Fight(mob);
+                    this.Fight(mob, quest, location);
+                    
                     break;
                 case 2:
                     break;
@@ -364,7 +412,7 @@ namespace Redemption
         }
 
         // Fighting with mob
-        public void Fight(Mob mob)
+        public void Fight(Mob mob, Quest quest, Location location)
         {
             bool characterFlee = false;
             // Get ready to fight! You face {mob name}, with level {mob level}.
@@ -408,10 +456,22 @@ namespace Redemption
                 Console.WriteLine(")");
                 Console.WriteLine("3. Flee");
                 Console.WriteLine();
-                Console.Write("Your choice: ");
-                int action = Convert.ToInt32(Console.ReadLine());
+                int answer = 1;
+                do
+                {
+                    Console.Write("Your choice: ");
+                    if (answer != 1 && answer != 2 && answer != 3) { Console.Write("(choose correct number) "); }
+                    try
+                    {
+                        answer = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch (FormatException)
+                    {
+                        answer = 0;
+                    }
+                } while (answer != 1 && answer != 2 && answer != 3);
                 Console.WriteLine();
-                switch (action)
+                switch (answer)
                 {
                     case 1:
                         Attack(this, mob, this.currentAtk, mob.baseArmor);
@@ -437,6 +497,21 @@ namespace Redemption
                 this.GainExp(mob.DropExp());
                 this.GainGold(mob.DropGold());
                 Console.WriteLine();
+
+                if(mob.questMob > 0)
+                {
+                    switch (mob.questMob)
+                    {
+                        case 1:
+                            quest.FinishQuest1(this, mob);
+                            break;
+                    }
+                    
+                }else if(location.name == "Cave")
+                {
+                    quest.counter += 1;
+                }
+
             }
             else if (mob.currentHp > 0 && characterFlee == false)
             {
@@ -501,8 +576,20 @@ namespace Redemption
                 i++;
             }
             Console.WriteLine();
-            Console.Write("Choose spell: ");
-            int spellNumber = Convert.ToInt32(Console.ReadLine());
+            int spellNumber = 1;
+            do
+            {
+                Console.Write("Your choice: ");
+                if (spellNumber < 1 || spellNumber > i) { Console.Write("(choose correct number) "); }
+                try
+                {
+                    spellNumber = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (FormatException)
+                {
+                    spellNumber = 0;
+                }
+            } while (spellNumber < 1 || spellNumber > i);
             Console.WriteLine();                
             spells[spellNumber - 1]();
             
@@ -514,7 +601,16 @@ namespace Redemption
         // Character flees from a fight (also loses all experience points and some gold)
         public bool Flee(Mob mob)
         {
-            this.gold -= mob.gold;
+            int goldLost = 0;
+            if (this.gold >= mob.gold) { 
+                goldLost = this.gold -= mob.gold;
+                this.gold -= goldLost;
+            }
+            else { 
+                goldLost = 0;
+                this.gold = 0;
+            }
+            
             this.experience = 0;
             // {character name} runs away! All experience and {mob gold} gold lost!
             Console.ForegroundColor = ConsoleColor.DarkGreen;
@@ -526,7 +622,7 @@ namespace Redemption
             Console.ResetColor();
             Console.Write(" experience and ");
             Console.ForegroundColor = ConsoleColor.DarkYellow;
-            Console.Write("{0}", mob.gold);
+            Console.Write("{0}", goldLost);
             Console.ResetColor();
             Console.WriteLine(" gold lost!");
             Console.WriteLine();
@@ -608,7 +704,7 @@ namespace Redemption
             SPELLS
         ==============================================================================
         */
-
+    
         // Spell
         public void TideThrust(Mob target)
         {
@@ -702,16 +798,66 @@ namespace Redemption
             }
         }
 
-        
+        // Spell
+        public void DarkSurge(Mob target)
+        {
+            int hpCost = 2;
 
-        
+            if (this.currentHp >= hpCost)
+            {
+                this.currentHp -= hpCost;
+                int damage = (this.currentAtk + 4) - target.baseArmor;
+                target.currentHp -= damage;
+                if (target.currentHp <= 0) { target.currentHp = 0; }
+                // {character name} attacks with Dark Surge for {damage}, {mob name} has {mob current hp} hp left.
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write("{0}", this.name);
+                Console.ResetColor();
+                Console.Write(" attacks with ");
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Dark Surge");
+                Console.ResetColor();
+                Console.Write(" for ");
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("{0}", damage);
+                Console.ResetColor();
+                Console.Write(", ");
+                Console.ForegroundColor = ConsoleColor.DarkGray;
+                Console.Write("{0}", target.name);
+                Console.ResetColor();
+                Console.Write(" has ");
+                Console.ForegroundColor = ConsoleColor.DarkRed;
+                Console.Write("{0}", target.currentHp);
+                Console.ResetColor();
+                Console.WriteLine(" hp left.");
+                Console.WriteLine();
+            }
+            else
+            {
+                // Dark Surge fails! {character name} has not enough hp... What a waste of time.
 
-        
+                Console.ForegroundColor = ConsoleColor.Magenta;
+                Console.Write("Dark Surge");
+                Console.ResetColor();
+                Console.Write(" fails! ");
+                Console.ForegroundColor = ConsoleColor.DarkGreen;
+                Console.Write("{0}", this.name);
+                Console.ResetColor();
+                Console.WriteLine(" has not enough hp... What a waste of time.");
+                Console.WriteLine();
+            }
+        }
 
 
-        
 
-        
+
+
+
+
+
+
+
+
 
     }
 }
