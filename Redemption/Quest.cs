@@ -14,14 +14,19 @@ namespace Redemption
         public int counterMax { get; set; }
 
 
-        public void SetKill5CaveMonsters()
+        public void SetKill5CaveMonsters(Character character)
         {
             this.name = "Clear the Cave";
             this.finished = false;
             this.counter = 0;
             this.counterMax = 5;
+            StartPlotQuest1(character);
         }
 
+        public void StartPlotQuest1(Character character)
+        {
+            
+        }
 
         public void FinishQuest1(Character character, Mob target)
         {

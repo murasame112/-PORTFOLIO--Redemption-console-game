@@ -25,6 +25,13 @@ namespace Redemption
         
         static void Main(string[] args)
         {
+            Console.ForegroundColor = ConsoleColor.Red;
+            Console.WriteLine("As a paladin I don't fear falling... I look forward to it.  - Nedlim the Seeker");
+            Console.ResetColor();
+            Console.WriteLine();
+            Console.WriteLine();
+
+
             
             Character playerCharacter = new Character();
             playerCharacter.CreateCharacter();
@@ -73,7 +80,8 @@ namespace Redemption
             location.locationActions.Add(() => location.GoToOldRuins(location));
 
             // Creating quests
-            quest.SetKill5CaveMonsters();
+            quest.SetKill5CaveMonsters(playerCharacter);
+
 
             while (true)
             {
