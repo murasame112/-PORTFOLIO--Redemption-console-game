@@ -26,7 +26,7 @@ namespace Redemption
         static void Main(string[] args)
         {
             Console.ForegroundColor = ConsoleColor.Red;
-            Console.WriteLine("As a paladin I don't fear falling... I look forward to it.  - Nedlim the Seeker");
+            Console.WriteLine("As a paladin I don't fear falling... I look forward to it. - Nedlim the Seeker");
             Console.ResetColor();
             Console.WriteLine();
             Console.WriteLine();
