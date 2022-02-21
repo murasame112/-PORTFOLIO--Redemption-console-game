@@ -65,6 +65,8 @@ namespace Redemption
             location.locationStrings.Add("Old Ruins [level 5]");
             location.locationActions.Add(() => location.GoToOldRuins(location));
 
+            playerCharacter.items[0] = basicSword;
+            playerCharacter.UpdateStats();
             // Creating quests
             quest.SetKill5CaveMonsters(playerCharacter);
 

@@ -360,13 +360,13 @@ namespace Redemption
 
             if (location.name == "Cave" && quest.counter >= quest.counterMax && quest.finished != true)
             {
-                mob.CreateCustomMob(4, "Senillneso", 3, 6, 25, 0, 0, 1);
+                mob.CreateCustomMob(4, "Senillneso", 3, 8, 28, 0, 0, 1);
 
             }
             else
             {
                 Random rand = new Random();
-                int mobNameNumber = rand.Next(0, location.genericMobNames.Count - 1);
+                int mobNameNumber = rand.Next(0, location.genericMobNames.Count);
                 mob.CreateGenericMob(location.locationLevel, location.genericMobNames[mobNameNumber]);
             }
 
@@ -520,7 +520,7 @@ namespace Redemption
                 this.LoseFight(mob);
                 Console.ResetColor();
             }
-
+            this.UpdateStats();
         }
 
         // Unit X attacks unit Y with basic attack
@@ -657,7 +657,7 @@ namespace Redemption
             Console.ForegroundColor = ConsoleColor.DarkGray;
             Console.Write("{0}'s", mob.name);
             Console.ResetColor();
-            Console.Write(" eyes, leaving you alone in the dark.");
+            Console.WriteLine(" eyes, leaving you alone in the dark.");
             Console.WriteLine(".");
             Console.WriteLine(".");
             Console.WriteLine(".");
