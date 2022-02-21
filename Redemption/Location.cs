@@ -171,7 +171,7 @@ namespace Redemption
             location.civilized = false;
             location.places = new string[1];
             location.places[0] = "Forest [level 1]";
-            location.locationLevel = 3;
+            location.locationLevel = 5;
             this.genericMobNames.Clear();
             this.genericMobNames.Add("Ghost of the Scribe");
             this.genericMobNames.Add("Ghost of the Servant");

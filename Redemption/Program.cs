@@ -4,7 +4,24 @@ using System.Linq;
 
 namespace Redemption
 {
-    // I know that quests don't look as they should... but I don't really know how to make it proper way :(     
+    // I know that quests don't look as they should... but I don't really know how to make it proper way :(
+
+    /*
+    Blue		- item names
+    Cyan 		- experience
+    DarkBlue	- mana
+    DarkCyan	- atk
+    DarkGray 	- mob names
+    DarkGreen	- player name, location names
+    DarkMagenta - armor
+    DarkRed		- hp
+    DarkYellow	- gold
+    Green 		- "happy" text, heal
+    Magenta 	- spell names
+    Red			- "angry" text, damage 
+    Yellow 		- level up, level
+    */
+
 
     class Program
     {
@@ -69,7 +86,6 @@ namespace Redemption
             playerCharacter.UpdateStats();
             // Creating quests
             quest.SetKill5CaveMonsters(playerCharacter);
-
 
             while (true)
             {

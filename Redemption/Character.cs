@@ -31,7 +31,7 @@ namespace Redemption
             this.experience = 0;
             this.maxExperience = 5;
             this.gold = 0;
-            this.maxMana = 5;
+            this.maxMana = 0;
 
         }
 
@@ -360,7 +360,7 @@ namespace Redemption
 
             if (location.name == "Cave" && quest.counter >= quest.counterMax && quest.finished != true)
             {
-                mob.CreateCustomMob(4, "Senillneso", 3, 8, 28, 0, 0, 1);
+                mob.CreateCustomMob(4, "Senillneso", 4, 8, 42, 0, 0, 1);
 
             }
             else
@@ -515,6 +515,10 @@ namespace Redemption
             }
             else if (mob.currentHp > 0 && characterFlee == false)
             {
+                if (mob.questMob > 0)
+                {
+                    quest.counter = 0;
+                }
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(AnnounceWinner(mob, this));
                 this.LoseFight(mob);
