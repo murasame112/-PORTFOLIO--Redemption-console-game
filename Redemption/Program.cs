@@ -4,21 +4,7 @@ using System.Linq;
 
 namespace Redemption
 {
-
-    /*
-    Console.ForegroundColor = ConsoleColor.Green; 
-    Console.ResetColor();
-
-
-
-    todo:
-        - kara za smierc
-        - zmienic smierc na utrate przytomnoisci czy cos
-    fabuła:
-        - na poczatku cytat nedlima, "asdf asdf" ~ Nedlim the Lightbringer (uzyc innego slowa)
-        - po zabiciu jakeigoś bossa mozemy zmienic sie w Dark Paladina - zabijajc bossa wyzwalamy jakas moc czy cos ktora mowi, ze zastapi nam swiatlosc
-        - dark paladin ma spelle kosztujące hp (nie zawsze, ale niektore)
-     */
+    // I know that quests don't look as they should... but I don't really know how to make it proper way :(     
 
     class Program
     {

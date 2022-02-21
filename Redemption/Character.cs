@@ -517,6 +517,7 @@ namespace Redemption
             {
                 Console.ForegroundColor = ConsoleColor.Red;
                 Console.WriteLine(AnnounceWinner(mob, this));
+                this.LoseFight(mob);
                 Console.ResetColor();
             }
 
@@ -634,10 +635,39 @@ namespace Redemption
         // Returns string telling who won the fight
         public string AnnounceWinner(Unit unitWinner, Unit unitLoser)
         {
-            string result = unitWinner.name + " was victorious! " + unitLoser.name + " has been slain.";
+            string result = unitWinner.name + " was victorious! " + unitLoser.name + " has lost this fight.";
 
 
             return result;
+        }
+
+        public void LoseFight(Mob mob)
+        {
+            /*
+            Your vision is going blank... All you see before passing out is disdain in {mob name} eyes, leaving you alone in the dark.
+            .
+            .
+            .
+
+            You don't know how long have you been lying here... at least nothing killed you while you were unconscious.
+            Anyway, your pockets seem empty, and all your experience is gone.
+             */
+
+            Console.Write("Your vision is going blank... All you see before passing out is disdain in ");
+            Console.ForegroundColor = ConsoleColor.DarkGray;
+            Console.Write("{0}'s", mob.name);
+            Console.ResetColor();
+            Console.Write(" eyes, leaving you alone in the dark.");
+            Console.WriteLine(".");
+            Console.WriteLine(".");
+            Console.WriteLine(".");
+            Console.WriteLine();
+            Console.WriteLine("You don't know how long have you been lying here... at least nothing killed you while you were unconscious.");
+            Console.WriteLine("Anyway, your pockets seem empty, and all your experience is gone.");
+            Console.WriteLine();
+
+            this.gold = 0;
+            this.experience = 0;
         }
 
         // Character gains gold from killed mob
